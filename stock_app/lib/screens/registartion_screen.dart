@@ -2,6 +2,7 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:stock_app/screens/login_screen.dart';
 import 'package:firebase_auth/firebase_auth.dart';
+import 'package:stock_app/screens/verify_email.dart';
 
 final _firebase = FirebaseAuth.instance;
 
@@ -45,15 +46,14 @@ class _RegistrationScreenState extends State<RegistrationScreen> {
       );
       return;
     }
-    ScaffoldMessenger.of(context).clearSnackBars();
     ScaffoldMessenger.of(context).showSnackBar(
       const SnackBar(
-        content: Text('Registered Successfully'),
+        content: Text('Please verify email'),
       ),
     );
     Navigator.of(context).pushReplacement(
       MaterialPageRoute(
-        builder: (ctx) => const LoginScreen(),
+        builder: (ctx) => const VerifyEmailScreen(),
       ),
     );
   }
