@@ -1,10 +1,7 @@
-// ignore_for_file: use_build_context_synchronously
-
 import 'package:flutter/material.dart';
-import 'package:stock_app/home_screen.dart';
-
-import 'package:stock_app/registartion_screen.dart';
+import 'package:stock_app/screens/registartion_screen.dart';
 import 'package:firebase_auth/firebase_auth.dart';
+import 'package:stock_app/screens/tabs.dart';
 
 final _firebase = FirebaseAuth.instance;
 
@@ -48,7 +45,7 @@ class _LoginScreenState extends State<LoginScreen> {
 
     Navigator.of(context).pushReplacement(
       MaterialPageRoute(
-        builder: (ctx) => const HomeScreen(),
+        builder: (ctx) => const Tabs(),
       ),
     );
   }
