@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "76544141323",
+    "project_id": "woc-stock-app",
+    "storage_bucket": "woc-stock-app.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:76544141323:android:474f1c33ffc657dd64ff0e",
+        "android_client_info": {
+          "package_name": "com.example.stock_app"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyBzX_kLq_jG-8FVxGUtes1AlFN3cHLhfYI"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
