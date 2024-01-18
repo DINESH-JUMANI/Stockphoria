@@ -43,6 +43,7 @@ class _RegistrationScreenState extends State<RegistrationScreen> {
           content: Text(error.message ?? 'Authentication failed.'),
         ),
       );
+      return;
     }
     ScaffoldMessenger.of(context).clearSnackBars();
     ScaffoldMessenger.of(context).showSnackBar(

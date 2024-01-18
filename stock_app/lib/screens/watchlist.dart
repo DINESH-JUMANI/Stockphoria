@@ -10,7 +10,7 @@ class WatchlistScreen extends StatelessWidget {
         mainAxisAlignment: MainAxisAlignment.center,
         children: [
           Image.asset(
-            'lib/assets/logo.png',
+            'assets/logo.png',
             width: 200,
             height: 180,
             color: Colors.black87,
