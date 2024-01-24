@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
-import 'package:stock_app/screens/news.dart';
-import 'package:stock_app/screens/profile.dart';
-import 'package:stock_app/screens/stocks.dart';
-import 'package:stock_app/screens/watchlist.dart';
+import 'package:stock_app/screens/tabs-screens/news.dart';
+import 'package:stock_app/screens/tabs-screens/profile.dart';
+import 'package:stock_app/screens/tabs-screens/stocks.dart';
+import 'package:stock_app/screens/tabs-screens/watchlist.dart';
 
 class Tabs extends StatefulWidget {
   const Tabs({super.key});
