@@ -1,6 +1,7 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_spinkit/flutter_spinkit.dart';
 import 'package:stock_app/screens/auth-screen/login_screen.dart';
 
 class ProfileScreen extends StatefulWidget {
@@ -51,7 +52,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
               future: _getUser(),
               builder: (context, snapshot) {
                 if (snapshot.connectionState != ConnectionState.done) {
-                  return const CircularProgressIndicator();
+                  return SpinKitCircle();
                 }
                 return Text(
                   username,

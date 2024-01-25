@@ -10,23 +10,24 @@ void main() async {
   await Firebase.initializeApp(
     options: DefaultFirebaseOptions.currentPlatform,
   );
+  Widget currentScreen = StreamBuilder(
+    stream: FirebaseAuth.instance.authStateChanges(),
+    builder: (ctx, snapshot) {
+      if (snapshot.connectionState == ConnectionState.waiting) {
+        return const CircularProgressIndicator();
+      }
+
+      if (snapshot.hasData) {
+        return const Tabs();
+      }
+
+      return const LoginScreen();
+    },
+  );
   runApp(
     MaterialApp(
       debugShowCheckedModeBanner: false,
-      home: StreamBuilder(
-        stream: FirebaseAuth.instance.authStateChanges(),
-        builder: (ctx, snapshot) {
-          if (snapshot.connectionState == ConnectionState.waiting) {
-            return const CircularProgressIndicator();
-          }
-
-          if (snapshot.hasData) {
-            return const Tabs();
-          }
-
-          return const LoginScreen();
-        },
-      ),
+      home: currentScreen,
     ),
   );
 }
