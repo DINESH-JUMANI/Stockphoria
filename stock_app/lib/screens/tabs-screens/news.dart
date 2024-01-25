@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_spinkit/flutter_spinkit.dart';
 import 'package:intl/intl.dart';
 import 'package:stock_app/data/news_data.dart';
+import 'package:url_launcher/url_launcher.dart';
 
 class NewsScreen extends StatefulWidget {
   const NewsScreen({Key? key}) : super(key: key);
@@ -52,10 +53,16 @@ class _NewsScreenState extends State<NewsScreen> {
                     snapshot.data!.articles![index].publishedAt.toString());
                 image ??=
                     'https://cdn.icon-icons.com/icons2/2783/PNG/512/photo_error_icon_177258.png';
-                String url = snapshot.data!.articles![index].url.toString();
+                final url =
+                    Uri.parse(snapshot.data!.articles![index].url.toString());
 
                 return ListTile(
-                  onTap: () {},
+                  onTap: () {
+                    launchUrl(
+                      url,
+                      mode: LaunchMode.inAppWebView,
+                    );
+                  },
                   title: Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [

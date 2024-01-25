@@ -52,7 +52,10 @@ class _ProfileScreenState extends State<ProfileScreen> {
               future: _getUser(),
               builder: (context, snapshot) {
                 if (snapshot.connectionState != ConnectionState.done) {
-                  return SpinKitCircle();
+                  return const SpinKitCircle(
+                    size: 50,
+                    color: Colors.black,
+                  );
                 }
                 return Text(
                   username,
