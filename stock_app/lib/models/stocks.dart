@@ -1,3 +1,5 @@
+// ignore_for_file: prefer_void_to_null
+
 class Stocks {
   Finance? finance;
 
@@ -19,7 +21,7 @@ class Stocks {
 
 class Finance {
   List<Result>? result;
-  Null? error;
+  Null error;
 
   Finance({this.result, this.error});
 
