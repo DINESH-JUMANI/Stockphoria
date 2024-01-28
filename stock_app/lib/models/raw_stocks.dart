@@ -1,11 +1,11 @@
 // ignore_for_file: prefer_void_to_null
 
-class Stocks {
+class RawStocks {
   Finance? finance;
 
-  Stocks({this.finance});
+  RawStocks({this.finance});
 
-  Stocks.fromJson(Map<String, dynamic> json) {
+  RawStocks.fromJson(Map<String, dynamic> json) {
     finance =
         json['finance'] != null ? Finance.fromJson(json['finance']) : null;
   }

@@ -1,14 +1,25 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_spinkit/flutter_spinkit.dart';
+import 'package:stock_app/models/stock_model.dart';
 import 'package:stock_app/data/stocks_data.dart';
+import 'package:stock_app/screens/buy_sell.dart';
 
 class StocksScreen extends ConsumerWidget {
   const StocksScreen({super.key});
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    StocksData stocks = StocksData();
+    StocksData stocksData = StocksData();
+    List<StockModel> stocks = [];
+
+    void onClick(StockModel stock) {
+      Navigator.of(context).push(MaterialPageRoute(builder: (ctx) {
+        return BuySell(
+          stock: stock,
+        );
+      }));
+    }
 
     return Scaffold(
       appBar: AppBar(
@@ -23,7 +34,7 @@ class StocksScreen extends ConsumerWidget {
         backgroundColor: Colors.black,
       ),
       body: FutureBuilder(
-        future: stocks.fetchStocks(),
+        future: stocksData.fetchStocks(),
         builder: (context, snapshot) {
           if (snapshot.connectionState == ConnectionState.waiting) {
             return const Center(
@@ -49,8 +60,17 @@ class StocksScreen extends ConsumerWidget {
                     .quotes![index].regularMarketPrice;
                 double? changeInPrice = snapshot.data!.finance!.result![0]
                     .quotes![index].regularMarketChangePercent;
+                stocks.add(
+                  StockModel(
+                      shortName: shortName!,
+                      longName: longName!,
+                      price: price!,
+                      changeInPrice: changeInPrice!),
+                );
                 return ListTile(
-                  onTap: () {},
+                  onTap: () {
+                    return onClick(stocks[index]);
+                  },
                   contentPadding: const EdgeInsets.all(10),
                   title: Row(
                     mainAxisAlignment: MainAxisAlignment.start,
@@ -58,7 +78,7 @@ class StocksScreen extends ConsumerWidget {
                       CircleAvatar(
                         backgroundColor: Colors.black,
                         child: Text(
-                          longName!.characters.first,
+                          longName.characters.first,
                           style: const TextStyle(color: Colors.white),
                         ),
                       ),
@@ -67,7 +87,7 @@ class StocksScreen extends ConsumerWidget {
                         crossAxisAlignment: CrossAxisAlignment.start,
                         children: [
                           Text(
-                            shortName!,
+                            shortName,
                             softWrap: true,
                             maxLines: 1,
                             overflow: TextOverflow.fade,
@@ -92,14 +112,14 @@ class StocksScreen extends ConsumerWidget {
                     mainAxisAlignment: MainAxisAlignment.end,
                     children: [
                       Text(
-                        price!.toStringAsPrecision(2),
+                        price.toStringAsPrecision(2),
                         style: const TextStyle(
                           color: Colors.black,
                           fontSize: 20,
                           fontWeight: FontWeight.w500,
                         ),
                       ),
-                      if (changeInPrice! >= 0)
+                      if (changeInPrice >= 0)
                         Text(
                           '+$changeInPrice%',
                           textAlign: TextAlign.end,
