@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:stock_app/providers/wishlist.dart';
+import 'package:stock_app/screens/buy_sell.dart';
 
 class ShowStocks extends ConsumerWidget {
   const ShowStocks({super.key});
@@ -22,7 +23,10 @@ class ShowStocks extends ConsumerWidget {
         double? changeInPrice = listOfWishListStocks[index].changeInPrice;
 
         return ListTile(
-          onTap: () {},
+          onTap: () {
+            Navigator.of(context).push(MaterialPageRoute(
+                builder: (ctx) => BuySell(stock: listOfWishListStocks[index])));
+          },
           contentPadding: const EdgeInsets.all(10),
           title: Row(
             mainAxisAlignment: MainAxisAlignment.start,

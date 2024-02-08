@@ -29,6 +29,34 @@ class _ProfileScreenState extends State<ProfileScreen> {
     username = userData.data()!['username'];
   }
 
+  List<IconData> icons = [
+    Icons.file_copy,
+    Icons.account_balance_wallet,
+    Icons.support_agent,
+    Icons.error_outline,
+  ];
+
+  List<String> headline = [
+    "Portfolio",
+    "Wallet",
+    "Customer Support 24x7",
+    "About Us"
+  ];
+
+  List<String> content = [
+    "View your Portfolio",
+    "Add Money",
+    "FAQs, Contact Us",
+    "About, Terms, Privacy Policy"
+  ];
+
+  void onClick(int index) {
+    if (index == 0) {
+    } else if (index == 1) {
+    } else if (index == 2) {
+    } else if (index == 3) {}
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -43,28 +71,117 @@ class _ProfileScreenState extends State<ProfileScreen> {
         ),
         backgroundColor: Colors.black,
       ),
-      body: Center(
+      body: Padding(
+        padding: const EdgeInsets.all(8.0),
         child: Column(
-          mainAxisAlignment: MainAxisAlignment.spaceEvenly,
           children: [
-            FutureBuilder(
-              future: _getUser(),
-              builder: (context, snapshot) {
-                if (snapshot.connectionState != ConnectionState.done) {
-                  return const SpinKitCircle(
-                    size: 50,
-                    color: Colors.black,
-                  );
-                }
-                return Text(
-                  username,
-                  style: const TextStyle(fontSize: 30),
-                );
-              },
+            Card(
+              color: Colors.grey.shade300,
+              child: Center(
+                child: Padding(
+                  padding: const EdgeInsets.all(10.0),
+                  child: Column(
+                    children: [
+                      const CircleAvatar(
+                        maxRadius: 30,
+                        backgroundColor: Colors.black,
+                        foregroundColor: Colors.white,
+                        child: Icon(
+                          Icons.person,
+                          size: 30,
+                        ),
+                      ),
+                      FutureBuilder(
+                        future: _getUser(),
+                        builder: (context, snapshot) {
+                          if (snapshot.connectionState !=
+                              ConnectionState.done) {
+                            return const SpinKitCircle(
+                              size: 50,
+                              color: Colors.black,
+                            );
+                          }
+                          return Text(
+                            username,
+                            style: const TextStyle(fontSize: 30),
+                          );
+                        },
+                      ),
+                    ],
+                  ),
+                ),
+              ),
             ),
-            ElevatedButton(
-              onPressed: _logOut,
-              child: const Text('Log Out'),
+            const SizedBox(height: 15),
+            Expanded(
+              child: Card(
+                color: Colors.grey.shade300,
+                child: ListView.separated(
+                  itemCount: 4,
+                  separatorBuilder: (ctx, index) {
+                    return const Divider(
+                      color: Colors.black26,
+                    );
+                  },
+                  itemBuilder: (ctx, index) {
+                    return ListTile(
+                      contentPadding: const EdgeInsets.all(8),
+                      onTap: () => onClick(index),
+                      title: Row(
+                        children: [
+                          CircleAvatar(
+                            maxRadius: 30,
+                            backgroundColor: Colors.black,
+                            foregroundColor: Colors.white,
+                            child: Icon(
+                              icons[index],
+                              size: 30,
+                            ),
+                          ),
+                          const SizedBox(width: 15),
+                          Column(
+                            crossAxisAlignment: CrossAxisAlignment.start,
+                            children: [
+                              Text(
+                                headline[index],
+                                style: const TextStyle(
+                                  fontWeight: FontWeight.bold,
+                                  fontSize: 18,
+                                ),
+                              ),
+                              Text(
+                                content[index],
+                                style: TextStyle(
+                                  color: Colors.grey.shade600,
+                                  fontSize: 15,
+                                ),
+                              ),
+                            ],
+                          )
+                        ],
+                      ),
+                    );
+                  },
+                ),
+              ),
+            ),
+            const SizedBox(height: 10),
+            SizedBox(
+              height: 50,
+              width: 200,
+              child: ElevatedButton(
+                style: const ButtonStyle(
+                  backgroundColor: MaterialStatePropertyAll(Colors.black),
+                ),
+                onPressed: _logOut,
+                child: const Text(
+                  'LOG OUT',
+                  style: TextStyle(
+                    color: Colors.white,
+                    fontSize: 20,
+                  ),
+                ),
+              ),
             ),
           ],
         ),
