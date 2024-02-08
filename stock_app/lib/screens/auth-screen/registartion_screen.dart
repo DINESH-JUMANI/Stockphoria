@@ -62,11 +62,10 @@ class _RegistrationScreenState extends State<RegistrationScreen> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: const Center(
-          child: Text(
-            'Register',
-            style: TextStyle(color: Colors.white),
-          ),
+        centerTitle: true,
+        title: const Text(
+          'Register',
+          style: TextStyle(color: Colors.white),
         ),
         backgroundColor: Colors.black,
       ),

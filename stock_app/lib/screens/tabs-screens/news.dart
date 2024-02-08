@@ -19,12 +19,11 @@ class _NewsScreenState extends State<NewsScreen> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: const Center(
-          child: Text(
-            'News',
-            style: TextStyle(
-              color: Colors.white,
-            ),
+        centerTitle: true,
+        title: const Text(
+          'News',
+          style: TextStyle(
+            color: Colors.white,
           ),
         ),
         backgroundColor: Colors.black,
@@ -71,7 +70,7 @@ class _NewsScreenState extends State<NewsScreen> {
                         softWrap: true,
                         style: const TextStyle(
                           color: Colors.black,
-                          fontSize: 20,
+                          fontSize: 15,
                           fontWeight: FontWeight.w500,
                         ),
                       ),
@@ -80,7 +79,7 @@ class _NewsScreenState extends State<NewsScreen> {
                         format.format(date),
                         style: TextStyle(
                           color: Colors.grey.shade600,
-                          fontSize: 15,
+                          fontSize: 13,
                         ),
                       ),
                     ],

@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:stock_app/models/stock_model.dart';
+import 'package:stock_app/providers/balance.dart';
 import 'package:stock_app/providers/wishlist.dart';
 
 class BuySell extends ConsumerStatefulWidget {
@@ -15,7 +16,6 @@ class BuySell extends ConsumerStatefulWidget {
 class _BuySellState extends ConsumerState<BuySell> {
   bool wishlist = false;
   final _quantityController = TextEditingController();
-  final double _availableBalance = 0;
 
   void onClick() {
     setState(() {
@@ -42,9 +42,11 @@ class _BuySellState extends ConsumerState<BuySell> {
 
   @override
   Widget build(BuildContext context) {
+    final double availableBalance = ref.watch(balanceProvider);
     return Scaffold(
       appBar: AppBar(
         foregroundColor: Colors.white,
+        centerTitle: true,
         actions: [
           InkWell(
             onTap: onClick,
@@ -53,14 +55,12 @@ class _BuySellState extends ConsumerState<BuySell> {
                 : const Icon(Icons.bookmark_border),
           ),
         ],
-        title: Center(
-          child: Text(
-            widget.stock.shortName,
-            textAlign: TextAlign.center,
-            style: const TextStyle(
-              fontSize: 20,
-              color: Colors.white,
-            ),
+        title: Text(
+          widget.stock.shortName,
+          textAlign: TextAlign.center,
+          style: const TextStyle(
+            fontSize: 20,
+            color: Colors.white,
           ),
         ),
         backgroundColor: Colors.black,
@@ -84,7 +84,7 @@ class _BuySellState extends ConsumerState<BuySell> {
               ),
             ),
             Text(
-              "Available Balance: ${_availableBalance.toStringAsFixed(2)}",
+              "Available Balance: ${availableBalance.toStringAsFixed(2)}",
               style: const TextStyle(
                 fontSize: 18,
               ),

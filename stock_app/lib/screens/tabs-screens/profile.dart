@@ -3,6 +3,10 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_spinkit/flutter_spinkit.dart';
 import 'package:stock_app/screens/auth-screen/login_screen.dart';
+import 'package:stock_app/screens/profile-screens/about_us.dart';
+import 'package:stock_app/screens/profile-screens/portfolio.dart';
+import 'package:stock_app/screens/profile-screens/support.dart';
+import 'package:stock_app/screens/profile-screens/wallet.dart';
 
 class ProfileScreen extends StatefulWidget {
   const ProfileScreen({Key? key}) : super(key: key);
@@ -52,9 +56,18 @@ class _ProfileScreenState extends State<ProfileScreen> {
 
   void onClick(int index) {
     if (index == 0) {
+      Navigator.of(context)
+          .push(MaterialPageRoute(builder: (ctx) => const PortfolioScreen()));
     } else if (index == 1) {
+      Navigator.of(context)
+          .push(MaterialPageRoute(builder: (ctx) => const WalletScreeen()));
     } else if (index == 2) {
-    } else if (index == 3) {}
+      Navigator.of(context)
+          .push(MaterialPageRoute(builder: (ctx) => const SupportScreen()));
+    } else if (index == 3) {
+      Navigator.of(context)
+          .push(MaterialPageRoute(builder: (ctx) => const AboutUsScreen()));
+    }
   }
 
   @override

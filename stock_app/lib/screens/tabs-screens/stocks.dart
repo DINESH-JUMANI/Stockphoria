@@ -23,12 +23,11 @@ class StocksScreen extends ConsumerWidget {
 
     return Scaffold(
       appBar: AppBar(
-        title: const Center(
-          child: Text(
-            'Stocks',
-            style: TextStyle(
-              color: Colors.white,
-            ),
+        centerTitle: true,
+        title: const Text(
+          'Stocks',
+          style: TextStyle(
+            color: Colors.white,
           ),
         ),
         backgroundColor: Colors.black,

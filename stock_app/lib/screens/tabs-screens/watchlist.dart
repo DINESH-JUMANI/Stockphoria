@@ -42,12 +42,11 @@ class _WatchlistScreenState extends ConsumerState<WatchlistScreen> {
     }
     return Scaffold(
       appBar: AppBar(
-        title: const Center(
-          child: Text(
-            'Watchlist',
-            style: TextStyle(
-              color: Colors.white,
-            ),
+        centerTitle: true,
+        title: const Text(
+          'Watchlist',
+          style: TextStyle(
+            color: Colors.white,
           ),
         ),
         backgroundColor: Colors.black,
