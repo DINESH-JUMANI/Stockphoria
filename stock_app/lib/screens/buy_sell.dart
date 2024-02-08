@@ -1,7 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:stock_app/models/buyed_stocks.dart';
 import 'package:stock_app/models/stock_model.dart';
 import 'package:stock_app/providers/balance.dart';
+import 'package:stock_app/providers/portfolio_stocks.dart';
 import 'package:stock_app/providers/wishlist.dart';
 
 class BuySell extends ConsumerStatefulWidget {
@@ -16,6 +18,40 @@ class BuySell extends ConsumerStatefulWidget {
 class _BuySellState extends ConsumerState<BuySell> {
   bool wishlist = false;
   final _quantityController = TextEditingController();
+
+  void _buyStock() {
+    double totalPrice =
+        widget.stock.price * double.parse(_quantityController.text);
+    double amountAvailable = ref.watch(balanceProvider);
+    if (totalPrice > amountAvailable) {
+      ScaffoldMessenger.of(context).clearSnackBars();
+      ScaffoldMessenger.of(context).showSnackBar(
+        const SnackBar(
+          backgroundColor: Colors.red,
+          content: Text('Not Enough Balance'),
+        ),
+      );
+      return;
+    }
+
+    ref.watch(buyedStocksProvider.notifier).add(BuyedStocksModel(
+        stockName: widget.stock.longName,
+        buyingPrice: widget.stock.price,
+        quantityBuyed: int.parse(_quantityController.text),
+        totalAmount: totalPrice));
+
+    ref.watch(balanceProvider.notifier).remove(totalPrice.toString());
+
+    ScaffoldMessenger.of(context).clearSnackBars();
+    ScaffoldMessenger.of(context).showSnackBar(
+      SnackBar(
+        backgroundColor: Colors.red,
+        content: Text('Successfully buyed ${_quantityController.text}'),
+      ),
+    );
+  }
+
+  void _sellStock() {}
 
   void onClick() {
     setState(() {
@@ -93,7 +129,7 @@ class _BuySellState extends ConsumerState<BuySell> {
             SizedBox(
               width: double.infinity,
               child: ElevatedButton(
-                onPressed: () {},
+                onPressed: _buyStock,
                 style: const ButtonStyle(
                     backgroundColor: MaterialStatePropertyAll(Colors.green)),
                 child: const Text(
@@ -106,7 +142,7 @@ class _BuySellState extends ConsumerState<BuySell> {
             SizedBox(
               width: double.infinity,
               child: ElevatedButton(
-                onPressed: () {},
+                onPressed: _sellStock,
                 style: const ButtonStyle(
                     backgroundColor: MaterialStatePropertyAll(Colors.red)),
                 child: const Text(
