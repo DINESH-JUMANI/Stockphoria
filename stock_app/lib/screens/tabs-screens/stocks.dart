@@ -57,15 +57,15 @@ class StocksScreen extends ConsumerWidget {
                 final longName =
                     snapshot.data!.finance!.result![0].quotes![index].longName;
                 double? price = snapshot.data!.finance!.result![0]
-                    .quotes![index].regularMarketPrice;
+                    .quotes![index].regularMarketPrice!;
                 double? changeInPrice = snapshot.data!.finance!.result![0]
-                    .quotes![index].regularMarketChangePercent;
+                    .quotes![index].regularMarketChangePercent!;
                 stocks.add(
                   StockModel(
                       shortName: shortName!,
                       longName: longName!,
-                      price: price!,
-                      changeInPrice: changeInPrice!),
+                      price: price,
+                      changeInPrice: changeInPrice),
                 );
                 return ListTile(
                   onTap: () {
@@ -112,7 +112,7 @@ class StocksScreen extends ConsumerWidget {
                     mainAxisAlignment: MainAxisAlignment.end,
                     children: [
                       Text(
-                        price.toStringAsPrecision(2),
+                        price.toStringAsFixed(2),
                         style: const TextStyle(
                           color: Colors.black,
                           fontSize: 20,
@@ -121,7 +121,7 @@ class StocksScreen extends ConsumerWidget {
                       ),
                       if (changeInPrice >= 0)
                         Text(
-                          '+$changeInPrice%',
+                          '+${changeInPrice.toStringAsFixed(2)}%',
                           textAlign: TextAlign.end,
                           style: const TextStyle(
                             color: Colors.green,
@@ -130,7 +130,7 @@ class StocksScreen extends ConsumerWidget {
                         )
                       else
                         Text(
-                          '$changeInPrice%',
+                          '${changeInPrice.toStringAsFixed(2)}%',
                           textAlign: TextAlign.end,
                           style: const TextStyle(
                             color: Colors.red,

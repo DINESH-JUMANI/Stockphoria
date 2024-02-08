@@ -24,7 +24,6 @@ class _ProfileScreenState extends State<ProfileScreen> {
   String username = "Profile";
   Future _getUser() async {
     final user = FirebaseAuth.instance.currentUser!;
-
     final userData =
         await FirebaseFirestore.instance.collection('user').doc(user.uid).get();
     username = userData.data()!['username'];

@@ -1,10 +1,19 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:stock_app/providers/wishlist.dart';
+import 'package:stock_app/widgets/show_stocks.dart';
 
-class WatchlistScreen extends StatelessWidget {
+class WatchlistScreen extends ConsumerStatefulWidget {
   const WatchlistScreen({super.key});
 
   @override
+  ConsumerState<WatchlistScreen> createState() => _WatchlistScreenState();
+}
+
+class _WatchlistScreenState extends ConsumerState<WatchlistScreen> {
+  @override
   Widget build(BuildContext context) {
+    final listOfWishListStocks = ref.watch(wishListProvider);
     Widget content = Center(
       child: Column(
         mainAxisAlignment: MainAxisAlignment.center,
@@ -26,6 +35,11 @@ class WatchlistScreen extends StatelessWidget {
         ],
       ),
     );
+    if (listOfWishListStocks.isNotEmpty) {
+      setState(() {
+        content = const ShowStocks();
+      });
+    }
     return Scaffold(
       appBar: AppBar(
         title: const Center(
