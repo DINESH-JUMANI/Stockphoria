@@ -20,9 +20,24 @@ class _BuySellState extends ConsumerState<BuySell> {
   final _quantityController = TextEditingController();
 
   void _buyStock() {
+    if (_quantityController.text.isEmpty) {
+      ScaffoldMessenger.of(context).clearSnackBars();
+      ScaffoldMessenger.of(context).showSnackBar(
+        const SnackBar(
+          backgroundColor: Colors.red,
+          content: Text('Enter Quantity'),
+        ),
+      );
+      return;
+    }
+    double amountAvailable = ref.watch(balanceProvider);
     double totalPrice =
         widget.stock.price * double.parse(_quantityController.text);
-    double amountAvailable = ref.watch(balanceProvider);
+    String stockName = widget.stock.longName;
+    int quantityBuyed = int.parse(_quantityController.text);
+    double buyingPrice = widget.stock.price;
+    bool isPresent = false;
+
     if (totalPrice > amountAvailable) {
       ScaffoldMessenger.of(context).clearSnackBars();
       ScaffoldMessenger.of(context).showSnackBar(
@@ -33,25 +48,115 @@ class _BuySellState extends ConsumerState<BuySell> {
       );
       return;
     }
-
-    ref.watch(buyedStocksProvider.notifier).add(BuyedStocksModel(
-        stockName: widget.stock.longName,
-        buyingPrice: widget.stock.price,
-        quantityBuyed: int.parse(_quantityController.text),
-        totalAmount: totalPrice));
-
     ref.watch(balanceProvider.notifier).remove(totalPrice.toString());
+
+    for (var element in ref.watch(buyedStocksProvider)) {
+      if (element.stockName == widget.stock.longName) {
+        buyingPrice = ((element.buyingPrice * element.quantityBuyed) +
+                (buyingPrice * quantityBuyed)) /
+            (quantityBuyed + element.quantityBuyed);
+        quantityBuyed += element.quantityBuyed;
+        totalPrice += element.totalAmount;
+        BuyedStocksModel stock = BuyedStocksModel(
+            stockName: stockName,
+            buyingPrice: buyingPrice,
+            quantityBuyed: quantityBuyed,
+            totalAmount: totalPrice);
+        ref.watch(buyedStocksProvider.notifier).remove(stock);
+        ref.watch(buyedStocksProvider.notifier).add(stock);
+        isPresent = true;
+        break;
+      }
+    }
+
+    if (!isPresent) {
+      BuyedStocksModel stock = BuyedStocksModel(
+          stockName: stockName,
+          buyingPrice: buyingPrice,
+          quantityBuyed: quantityBuyed,
+          totalAmount: totalPrice);
+      ref.watch(buyedStocksProvider.notifier).add(stock);
+    }
 
     ScaffoldMessenger.of(context).clearSnackBars();
     ScaffoldMessenger.of(context).showSnackBar(
       SnackBar(
-        backgroundColor: Colors.red,
+        backgroundColor: Colors.green,
         content: Text('Successfully buyed ${_quantityController.text}'),
       ),
     );
   }
 
-  void _sellStock() {}
+  void _sellStock() {
+    if (_quantityController.text.isEmpty) {
+      ScaffoldMessenger.of(context).clearSnackBars();
+      ScaffoldMessenger.of(context).showSnackBar(
+        const SnackBar(
+          backgroundColor: Colors.red,
+          content: Text('Enter Quantity'),
+        ),
+      );
+      return;
+    }
+    double totalPrice =
+        widget.stock.price * double.parse(_quantityController.text);
+    String stockName = widget.stock.longName;
+    int quantityBuyed = int.parse(_quantityController.text);
+    double buyingPrice = widget.stock.price;
+    bool isPresent = false;
+    double earnedMoney = quantityBuyed * widget.stock.price;
+
+    for (var element in ref.watch(buyedStocksProvider)) {
+      if (element.stockName == widget.stock.longName) {
+        if (element.quantityBuyed < quantityBuyed) {
+          ScaffoldMessenger.of(context).clearSnackBars();
+          ScaffoldMessenger.of(context).showSnackBar(
+            const SnackBar(
+              backgroundColor: Colors.red,
+              content: Text('Insufficient Quantity'),
+            ),
+          );
+          return;
+        }
+        quantityBuyed = element.quantityBuyed - quantityBuyed;
+
+        totalPrice = element.buyingPrice * quantityBuyed;
+        BuyedStocksModel stock = BuyedStocksModel(
+            stockName: stockName,
+            buyingPrice: buyingPrice,
+            quantityBuyed: quantityBuyed,
+            totalAmount: totalPrice);
+
+        ref.watch(buyedStocksProvider.notifier).remove(stock);
+        ref.watch(buyedStocksProvider.notifier).add(stock);
+        ref.watch(balanceProvider.notifier).add(earnedMoney.toString());
+        isPresent = true;
+        if (quantityBuyed == 0) {
+          ref.watch(buyedStocksProvider.notifier).remove(stock);
+        }
+      }
+    }
+    if (isPresent) {
+      ScaffoldMessenger.of(context).clearSnackBars();
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(
+          backgroundColor: Colors.green,
+          content: Text('Sold ${_quantityController.text} Stocks'),
+        ),
+      );
+      return;
+    }
+    if (!isPresent) {
+      ScaffoldMessenger.of(context).clearSnackBars();
+      ScaffoldMessenger.of(context).showSnackBar(
+        const SnackBar(
+          backgroundColor: Colors.red,
+          content: Text('No stocks found'),
+        ),
+      );
+      return;
+    }
+  }
 
   void onClick() {
     setState(() {
