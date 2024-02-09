@@ -184,6 +184,14 @@ class _BuySellState extends ConsumerState<BuySell> {
   @override
   Widget build(BuildContext context) {
     final double availableBalance = ref.watch(balanceProvider);
+    var listOfStocks = ref.watch(buyedStocksProvider);
+    int buyedQuantity = 0;
+    for (var element in listOfStocks) {
+      if (element.stockName == widget.stock.longName) {
+        buyedQuantity = element.quantityBuyed;
+        break;
+      }
+    }
     return Scaffold(
       appBar: AppBar(
         foregroundColor: Colors.white,
@@ -219,15 +227,23 @@ class _BuySellState extends ConsumerState<BuySell> {
             ),
             const SizedBox(height: 20),
             Text(
-              "Total Price: ${widget.stock.price}",
+              "Price: ${widget.stock.price.toStringAsFixed(2)}",
               style: const TextStyle(
-                fontSize: 18,
+                fontSize: 22,
               ),
             ),
+            const SizedBox(height: 10),
             Text(
               "Available Balance: ${availableBalance.toStringAsFixed(2)}",
               style: const TextStyle(
-                fontSize: 18,
+                fontSize: 22,
+              ),
+            ),
+            const SizedBox(height: 10),
+            Text(
+              "Buyed Quantity: $buyedQuantity",
+              style: const TextStyle(
+                fontSize: 22,
               ),
             ),
             const SizedBox(height: 20),
