@@ -28,7 +28,7 @@ class AboutUsScreen extends StatelessWidget {
         centerTitle: true,
         backgroundColor: Colors.black,
         foregroundColor: Colors.white,
-        title: const Text('Support'),
+        title: const Text('About Us'),
       ),
       body: Container(
         margin: const EdgeInsets.all(10),
