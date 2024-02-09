@@ -87,12 +87,13 @@ class _ProfileScreenState extends State<ProfileScreen> {
       body: Padding(
         padding: const EdgeInsets.all(8.0),
         child: Column(
+          mainAxisAlignment: MainAxisAlignment.spaceBetween,
           children: [
             Card(
               color: Colors.grey.shade300,
               child: Center(
                 child: Padding(
-                  padding: const EdgeInsets.all(10.0),
+                  padding: const EdgeInsets.all(20.0),
                   child: Column(
                     children: [
                       const CircleAvatar(
@@ -104,6 +105,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
                           size: 30,
                         ),
                       ),
+                      const SizedBox(height: 10),
                       FutureBuilder(
                         future: _getUser(),
                         builder: (context, snapshot) {
