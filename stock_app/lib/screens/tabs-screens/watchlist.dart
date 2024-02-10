@@ -20,8 +20,8 @@ class _WatchlistScreenState extends ConsumerState<WatchlistScreen> {
         children: [
           Image.asset(
             'assets/logo.png',
-            width: 200,
-            height: 180,
+            width: 130,
+            height: 150,
             color: Colors.black87,
           ),
           const SizedBox(height: 20),

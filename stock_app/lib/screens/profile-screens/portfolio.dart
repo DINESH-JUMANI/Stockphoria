@@ -25,7 +25,7 @@ class PortfolioScreen extends ConsumerWidget {
             mainAxisAlignment: MainAxisAlignment.center,
             children: [
               Image.asset(
-                'assets/stock.png',
+                'assets/stocks.png',
                 width: 200,
                 height: 180,
                 color: Colors.black87,
