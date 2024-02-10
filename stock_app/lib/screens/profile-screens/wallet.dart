@@ -16,6 +16,16 @@ class _WalletScreenState extends ConsumerState<WalletScreeen> {
   final _enteredAmountController = TextEditingController();
 
   void _deposit() {
+    if (_enteredAmountController.text.isEmpty) {
+      ScaffoldMessenger.of(context).clearSnackBars();
+      ScaffoldMessenger.of(context).showSnackBar(
+        const SnackBar(
+          backgroundColor: Colors.red,
+          content: Text('Enter the amount'),
+        ),
+      );
+      return;
+    }
     setState(() {
       ref.read(balanceProvider.notifier).add(_enteredAmountController.text);
       BalanceHandler().add(ref);
@@ -31,6 +41,16 @@ class _WalletScreenState extends ConsumerState<WalletScreeen> {
   }
 
   void _withdraw() {
+    if (_enteredAmountController.text.isEmpty) {
+      ScaffoldMessenger.of(context).clearSnackBars();
+      ScaffoldMessenger.of(context).showSnackBar(
+        const SnackBar(
+          backgroundColor: Colors.red,
+          content: Text('Enter the amount'),
+        ),
+      );
+      return;
+    }
     setState(() {
       ref.read(balanceProvider.notifier).remove(_enteredAmountController.text);
       BalanceHandler().add(ref);
@@ -38,7 +58,7 @@ class _WalletScreenState extends ConsumerState<WalletScreeen> {
       ScaffoldMessenger.of(context).clearSnackBars();
       ScaffoldMessenger.of(context).showSnackBar(
         const SnackBar(
-          backgroundColor: Colors.red,
+          backgroundColor: Colors.green,
           content: Text('Successfully Withdrawn'),
         ),
       );

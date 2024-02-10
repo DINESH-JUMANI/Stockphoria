@@ -18,6 +18,12 @@ class ProfileScreen extends StatefulWidget {
 class _ProfileScreenState extends State<ProfileScreen> {
   void _logOut() {
     FirebaseAuth.instance.signOut();
+    ScaffoldMessenger.of(context).clearSnackBars();
+    ScaffoldMessenger.of(context).showSnackBar(
+      const SnackBar(
+        content: Text('Logged Out'),
+      ),
+    );
     Navigator.of(context).pushReplacement(
       MaterialPageRoute(
         builder: (ctx) => const LoginScreen(),
