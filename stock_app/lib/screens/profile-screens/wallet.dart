@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:stock_app/database-operations/balance_handler.dart';
 import 'package:stock_app/providers/balance.dart';
 
 class WalletScreeen extends ConsumerStatefulWidget {
@@ -17,6 +18,7 @@ class _WalletScreenState extends ConsumerState<WalletScreeen> {
   void _deposit() {
     setState(() {
       ref.read(balanceProvider.notifier).add(_enteredAmountController.text);
+      BalanceHandler().add(ref);
       _enteredAmountController.text = "";
       ScaffoldMessenger.of(context).clearSnackBars();
       ScaffoldMessenger.of(context).showSnackBar(
@@ -31,6 +33,7 @@ class _WalletScreenState extends ConsumerState<WalletScreeen> {
   void _withdraw() {
     setState(() {
       ref.read(balanceProvider.notifier).remove(_enteredAmountController.text);
+      BalanceHandler().add(ref);
       _enteredAmountController.text = "";
       ScaffoldMessenger.of(context).clearSnackBars();
       ScaffoldMessenger.of(context).showSnackBar(
@@ -56,7 +59,11 @@ class _WalletScreenState extends ConsumerState<WalletScreeen> {
 
   @override
   Widget build(BuildContext context) {
+    if (ref.watch(balanceProvider) == 0) {
+      BalanceHandler().fetch(ref);
+    }
     double amount = ref.watch(balanceProvider);
+
     return Scaffold(
       appBar: AppBar(
         backgroundColor: Colors.black,

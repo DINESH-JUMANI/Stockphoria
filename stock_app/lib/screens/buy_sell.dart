@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:stock_app/database-operations/balance_handler.dart';
+import 'package:stock_app/database-operations/portfolio_handler.dart';
 import 'package:stock_app/models/buyed_stocks.dart';
 import 'package:stock_app/models/stock_model.dart';
 import 'package:stock_app/providers/balance.dart';
@@ -49,6 +51,7 @@ class _BuySellState extends ConsumerState<BuySell> {
       return;
     }
     ref.watch(balanceProvider.notifier).remove(totalPrice.toString());
+    BalanceHandler().add(ref);
 
     for (var element in ref.watch(buyedStocksProvider)) {
       if (element.stockName == widget.stock.longName) {
@@ -64,6 +67,7 @@ class _BuySellState extends ConsumerState<BuySell> {
             totalAmount: totalPrice);
         ref.watch(buyedStocksProvider.notifier).remove(stock);
         ref.watch(buyedStocksProvider.notifier).add(stock);
+        PortfolioHandler().add(ref);
         isPresent = true;
         break;
       }
@@ -76,6 +80,7 @@ class _BuySellState extends ConsumerState<BuySell> {
           quantityBuyed: quantityBuyed,
           totalAmount: totalPrice);
       ref.watch(buyedStocksProvider.notifier).add(stock);
+      PortfolioHandler().add(ref);
     }
 
     ScaffoldMessenger.of(context).clearSnackBars();
@@ -129,10 +134,13 @@ class _BuySellState extends ConsumerState<BuySell> {
 
         ref.watch(buyedStocksProvider.notifier).remove(stock);
         ref.watch(buyedStocksProvider.notifier).add(stock);
+        PortfolioHandler().add(ref);
         ref.watch(balanceProvider.notifier).add(earnedMoney.toString());
+        BalanceHandler().add(ref);
         isPresent = true;
         if (quantityBuyed == 0) {
           ref.watch(buyedStocksProvider.notifier).remove(stock);
+          PortfolioHandler().add(ref);
         }
       }
     }
