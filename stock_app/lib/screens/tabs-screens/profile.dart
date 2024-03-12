@@ -1,12 +1,14 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/widgets.dart';
 import 'package:flutter_spinkit/flutter_spinkit.dart';
 import 'package:stock_app/screens/auth-screen/login_screen.dart';
 import 'package:stock_app/screens/profile-screens/about_us.dart';
 import 'package:stock_app/screens/profile-screens/portfolio.dart';
 import 'package:stock_app/screens/profile-screens/support.dart';
 import 'package:stock_app/screens/profile-screens/wallet.dart';
+import 'package:stock_app/screens/tabs-screens/edit_profile_screen.dart';
 
 class ProfileScreen extends StatefulWidget {
   const ProfileScreen({Key? key}) : super(key: key);
@@ -95,40 +97,46 @@ class _ProfileScreenState extends State<ProfileScreen> {
         child: Column(
           mainAxisAlignment: MainAxisAlignment.spaceBetween,
           children: [
-            Card(
-              color: Colors.grey.shade300,
-              child: Center(
-                child: Padding(
-                  padding: const EdgeInsets.all(20.0),
-                  child: Column(
-                    children: [
-                      const CircleAvatar(
-                        maxRadius: 30,
-                        backgroundColor: Colors.black,
-                        foregroundColor: Colors.white,
-                        child: Icon(
-                          Icons.person,
-                          size: 30,
+            GestureDetector(
+              onTap: () {
+                Navigator.push(context,
+                    MaterialPageRoute(builder: (_) => EditProfileScreen()));
+              },
+              child: Card(
+                color: Colors.grey.shade300,
+                child: Center(
+                  child: Padding(
+                    padding: const EdgeInsets.all(20.0),
+                    child: Column(
+                      children: [
+                        const CircleAvatar(
+                          maxRadius: 30,
+                          backgroundColor: Colors.black,
+                          foregroundColor: Colors.white,
+                          child: Icon(
+                            Icons.person,
+                            size: 30,
+                          ),
                         ),
-                      ),
-                      const SizedBox(height: 10),
-                      FutureBuilder(
-                        future: _getUser(),
-                        builder: (context, snapshot) {
-                          if (snapshot.connectionState !=
-                              ConnectionState.done) {
-                            return const SpinKitCircle(
-                              size: 50,
-                              color: Colors.black,
+                        const SizedBox(height: 10),
+                        FutureBuilder(
+                          future: _getUser(),
+                          builder: (context, snapshot) {
+                            if (snapshot.connectionState !=
+                                ConnectionState.done) {
+                              return const SpinKitCircle(
+                                size: 50,
+                                color: Colors.black,
+                              );
+                            }
+                            return Text(
+                              username,
+                              style: const TextStyle(fontSize: 30),
                             );
-                          }
-                          return Text(
-                            username,
-                            style: const TextStyle(fontSize: 30),
-                          );
-                        },
-                      ),
-                    ],
+                          },
+                        ),
+                      ],
+                    ),
                   ),
                 ),
               ),
