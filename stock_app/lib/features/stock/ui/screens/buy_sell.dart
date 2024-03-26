@@ -2,14 +2,13 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:stock_app/database-operations/balance_handler.dart';
 import 'package:stock_app/database-operations/portfolio_handler.dart';
-import 'package:stock_app/models/buyed_stocks.dart';
-import 'package:stock_app/models/stock_model.dart';
+import 'package:stock_app/features/stock/model/buyed_stocks.dart';
+import 'package:stock_app/features/stock/model/stock_model.dart';
 import 'package:stock_app/providers/balance.dart';
 import 'package:stock_app/providers/portfolio_stocks.dart';
 import 'package:stock_app/providers/wishlist.dart';
-import 'package:stock_app/screens/tabs-screens/chart_screen.dart';
-
-import 'package:stock_app/widgets/show_chart.dart';
+import 'package:stock_app/features/chart/ui/screens/chart_screen.dart';
+import 'package:stock_app/features/chart/ui/widgets/show_chart.dart';
 
 class BuySell extends ConsumerStatefulWidget {
   final StockModel stock;

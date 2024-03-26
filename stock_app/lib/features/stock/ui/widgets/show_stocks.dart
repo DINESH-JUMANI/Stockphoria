@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:stock_app/providers/wishlist.dart';
-import 'package:stock_app/screens/buy_sell.dart';
+import 'package:stock_app/features/stock/ui/screens/buy_sell.dart';
 
 class ShowStocks extends ConsumerWidget {
   const ShowStocks({super.key});

@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
-import 'package:stock_app/screens/auth-screen/registartion_screen.dart';
+import 'package:stock_app/features/auth/screens/registartion_screen.dart';
 import 'package:firebase_auth/firebase_auth.dart';
-import 'package:stock_app/widgets/tabs.dart';
+import 'package:stock_app/tabs.dart';
 
 final _firebase = FirebaseAuth.instance;
 

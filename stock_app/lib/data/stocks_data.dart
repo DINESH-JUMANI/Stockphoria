@@ -1,6 +1,6 @@
 import 'dart:convert';
 import 'package:http/http.dart' as http;
-import 'package:stock_app/models/raw_stocks.dart';
+import 'package:stock_app/features/stock/model/raw_stocks.dart';
 
 class StocksData {
   Future<RawStocks> fetchStocks() async {

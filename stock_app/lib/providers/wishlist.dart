@@ -1,5 +1,5 @@
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:stock_app/models/stock_model.dart';
+import 'package:stock_app/features/stock/model/stock_model.dart';
 
 class WishListNotifier extends StateNotifier<List<StockModel>> {
   WishListNotifier() : super([]);

@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:stock_app/providers/wishlist.dart';
-import 'package:stock_app/widgets/show_stocks.dart';
+import 'package:stock_app/features/stock/ui/widgets/show_stocks.dart';
 
 class WatchlistScreen extends ConsumerStatefulWidget {
   const WatchlistScreen({super.key});

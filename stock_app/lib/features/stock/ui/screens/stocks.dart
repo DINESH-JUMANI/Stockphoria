@@ -1,9 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_spinkit/flutter_spinkit.dart';
-import 'package:stock_app/models/stock_model.dart';
+import 'package:stock_app/features/stock/model/stock_model.dart';
 import 'package:stock_app/data/stocks_data.dart';
-import 'package:stock_app/screens/buy_sell.dart';
+import 'package:stock_app/features/stock/ui/screens/buy_sell.dart';
 
 class StocksScreen extends ConsumerWidget {
   const StocksScreen({super.key});

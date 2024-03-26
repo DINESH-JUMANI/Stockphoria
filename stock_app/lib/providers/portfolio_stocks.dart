@@ -1,5 +1,5 @@
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:stock_app/models/buyed_stocks.dart';
+import 'package:stock_app/features/stock/model/buyed_stocks.dart';
 
 class PortfolioStocksListNotifier
     extends StateNotifier<List<BuyedStocksModel>> {

@@ -2,12 +2,12 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_spinkit/flutter_spinkit.dart';
-import 'package:stock_app/screens/auth-screen/login_screen.dart';
-import 'package:stock_app/screens/profile-screens/about_us.dart';
-import 'package:stock_app/screens/profile-screens/portfolio.dart';
-import 'package:stock_app/screens/profile-screens/support.dart';
-import 'package:stock_app/screens/profile-screens/wallet.dart';
-import 'package:stock_app/screens/tabs-screens/edit_profile_screen.dart';
+import 'package:stock_app/features/auth/screens/login_screen.dart';
+import 'package:stock_app/features/profile/ui/screens/about_us.dart';
+import 'package:stock_app/features/profile/ui/screens/portfolio.dart';
+import 'package:stock_app/features/profile/ui/screens/support.dart';
+import 'package:stock_app/features/profile/ui/screens/wallet.dart';
+import 'package:stock_app/features/profile/ui/screens/edit_profile_screen.dart';
 
 class ProfileScreen extends StatefulWidget {
   const ProfileScreen({Key? key}) : super(key: key);

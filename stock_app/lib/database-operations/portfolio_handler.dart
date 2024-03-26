@@ -1,7 +1,7 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:stock_app/models/buyed_stocks.dart';
+import 'package:stock_app/features/stock/model/buyed_stocks.dart';
 import 'package:stock_app/providers/portfolio_stocks.dart';
 
 final user = FirebaseAuth.instance.currentUser!;

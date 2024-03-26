@@ -1,8 +1,8 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
-import 'package:stock_app/screens/auth-screen/login_screen.dart';
+import 'package:stock_app/features/auth/screens/login_screen.dart';
 import 'package:firebase_auth/firebase_auth.dart';
-import 'package:stock_app/screens/auth-screen/verify_email.dart';
+import 'package:stock_app/features/auth/screens/verify_email.dart';
 
 final _firebase = FirebaseAuth.instance;
 

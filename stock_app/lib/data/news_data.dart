@@ -1,6 +1,6 @@
 import 'dart:convert';
 import 'package:http/http.dart' as http;
-import 'package:stock_app/models/news.dart';
+import 'package:stock_app/features/news/model/news.dart';
 
 class NewsData {
   Future<News> fetchNews() async {
