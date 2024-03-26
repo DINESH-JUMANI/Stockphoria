@@ -51,20 +51,29 @@ class StocksScreen extends ConsumerWidget {
                 );
               },
               itemBuilder: (context, index) {
-                final shortName =
-                    snapshot.data!.finance!.result![0].quotes![index].shortName;
-                final longName =
-                    snapshot.data!.finance!.result![0].quotes![index].longName;
-                double? price = snapshot.data!.finance!.result![0]
-                    .quotes![index].regularMarketPrice!;
-                double? changeInPrice = snapshot.data!.finance!.result![0]
-                    .quotes![index].regularMarketChangePercent!;
+                String? shortName =
+                    snapshot.data?.finance?.result?[0].quotes?[index].shortName;
+                if (shortName == null) shortName = 'Null';
+                String? longName =
+                    snapshot.data?.finance?.result?[0].quotes?[index].longName;
+                if (longName == null) longName = 'Null';
+                double? price = snapshot.data?.finance?.result![0]
+                    .quotes?[index].regularMarketPrice;
+                if (price == null) price = 0.0;
+                double? changeInPrice = snapshot.data?.finance?.result?[0]
+                    .quotes?[index].regularMarketChangePercent;
+                if (changeInPrice == null) changeInPrice = 0.0;
+                String? symbol =
+                    snapshot.data?.finance?.result?[0].quotes?[index].symbol;
+                if (symbol == null) symbol = 'Null';
                 stocks.add(
                   StockModel(
-                      shortName: shortName!,
-                      longName: longName!,
-                      price: price,
-                      changeInPrice: changeInPrice),
+                    shortName: shortName,
+                    longName: longName,
+                    price: price,
+                    changeInPrice: changeInPrice,
+                    symbol: symbol,
+                  ),
                 );
                 return ListTile(
                   onTap: () {

@@ -7,6 +7,9 @@ import 'package:stock_app/models/stock_model.dart';
 import 'package:stock_app/providers/balance.dart';
 import 'package:stock_app/providers/portfolio_stocks.dart';
 import 'package:stock_app/providers/wishlist.dart';
+import 'package:stock_app/screens/tabs-screens/chart_screen.dart';
+
+import 'package:stock_app/widgets/show_chart.dart';
 
 class BuySell extends ConsumerStatefulWidget {
   final StockModel stock;
@@ -224,63 +227,82 @@ class _BuySellState extends ConsumerState<BuySell> {
       ),
       body: Padding(
         padding: const EdgeInsets.all(10.0),
-        child: Column(
-          mainAxisAlignment: MainAxisAlignment.start,
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            TextField(
-              controller: _quantityController,
-              keyboardType: TextInputType.number,
-              decoration: const InputDecoration(label: Text('Quantity')),
-            ),
-            const SizedBox(height: 20),
-            Text(
-              "Price: ${widget.stock.price.toStringAsFixed(2)}",
-              style: const TextStyle(
-                fontSize: 22,
-              ),
-            ),
-            const SizedBox(height: 10),
-            Text(
-              "Available Balance: ${availableBalance.toStringAsFixed(2)}",
-              style: const TextStyle(
-                fontSize: 22,
-              ),
-            ),
-            const SizedBox(height: 10),
-            Text(
-              "Buyed Quantity: $buyedQuantity",
-              style: const TextStyle(
-                fontSize: 22,
-              ),
-            ),
-            const SizedBox(height: 20),
-            SizedBox(
-              width: double.infinity,
-              child: ElevatedButton(
-                onPressed: _buyStock,
-                style: const ButtonStyle(
-                    backgroundColor: MaterialStatePropertyAll(Colors.green)),
-                child: const Text(
-                  'Buy',
-                  style: TextStyle(color: Colors.white),
+        child: SingleChildScrollView(
+          child: Column(
+            mainAxisAlignment: MainAxisAlignment.start,
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              GestureDetector(
+                onTap: () => Navigator.of(context).push(
+                  MaterialPageRoute(
+                    builder: (_) => ChartScreen(
+                      symbol: widget.stock.symbol,
+                    ),
+                  ),
+                ),
+                child: Container(
+                  height: 300,
+                  width: double.infinity,
+                  child: ShowChart(
+                    symbol: widget.stock.symbol,
+                  ),
                 ),
               ),
-            ),
-            const SizedBox(height: 10),
-            SizedBox(
-              width: double.infinity,
-              child: ElevatedButton(
-                onPressed: _sellStock,
-                style: const ButtonStyle(
-                    backgroundColor: MaterialStatePropertyAll(Colors.red)),
-                child: const Text(
-                  'Sell',
-                  style: TextStyle(color: Colors.white),
+              SizedBox(height: 50),
+              TextField(
+                controller: _quantityController,
+                keyboardType: TextInputType.number,
+                decoration: const InputDecoration(label: Text('Quantity')),
+              ),
+              const SizedBox(height: 20),
+              Text(
+                "Price: ${widget.stock.price.toStringAsFixed(2)}",
+                style: const TextStyle(
+                  fontSize: 22,
                 ),
               ),
-            ),
-          ],
+              const SizedBox(height: 10),
+              Text(
+                "Available Balance: ${availableBalance.toStringAsFixed(2)}",
+                style: const TextStyle(
+                  fontSize: 22,
+                ),
+              ),
+              const SizedBox(height: 10),
+              Text(
+                "Buyed Quantity: $buyedQuantity",
+                style: const TextStyle(
+                  fontSize: 22,
+                ),
+              ),
+              const SizedBox(height: 20),
+              SizedBox(
+                width: double.infinity,
+                child: ElevatedButton(
+                  onPressed: _buyStock,
+                  style: const ButtonStyle(
+                      backgroundColor: MaterialStatePropertyAll(Colors.green)),
+                  child: const Text(
+                    'Buy',
+                    style: TextStyle(color: Colors.white),
+                  ),
+                ),
+              ),
+              const SizedBox(height: 10),
+              SizedBox(
+                width: double.infinity,
+                child: ElevatedButton(
+                  onPressed: _sellStock,
+                  style: const ButtonStyle(
+                      backgroundColor: MaterialStatePropertyAll(Colors.red)),
+                  child: const Text(
+                    'Sell',
+                    style: TextStyle(color: Colors.white),
+                  ),
+                ),
+              ),
+            ],
+          ),
         ),
       ),
     );

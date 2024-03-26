@@ -36,6 +36,7 @@ class _RegistrationScreenState extends State<RegistrationScreen> {
         'username': _enteredName,
         'phone_number': _enteredPhoneNumber,
         'email': _enteredEmail,
+        'password': _enteredPassword,
       });
     } on FirebaseAuthException catch (error) {
       ScaffoldMessenger.of(context).clearSnackBars();
