@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:stock_app/features/stock/ui/widgets/list_stocks.dart';
 import 'package:stock_app/providers/wishlist.dart';
-import 'package:stock_app/features/stock/ui/widgets/show_stocks.dart';
 
 class WatchlistScreen extends ConsumerStatefulWidget {
   const WatchlistScreen({super.key});
@@ -37,7 +37,9 @@ class _WatchlistScreenState extends ConsumerState<WatchlistScreen> {
     );
     if (listOfWishListStocks.isNotEmpty) {
       setState(() {
-        content = const ShowStocks();
+        content = ListStocks(
+          stocks: listOfWishListStocks,
+        );
       });
     }
     return Scaffold(

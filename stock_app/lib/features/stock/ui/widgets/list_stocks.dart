@@ -1,31 +1,40 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:stock_app/providers/wishlist.dart';
+import 'package:stock_app/features/stock/model/stock_model.dart';
 import 'package:stock_app/features/stock/ui/screens/buy_sell.dart';
 
-class ShowStocks extends ConsumerWidget {
-  const ShowStocks({super.key});
+class ListStocks extends StatelessWidget {
+  const ListStocks({Key? key, required this.stocks}) : super(key: key);
+  final List<StockModel> stocks;
+
+  void onClick(StockModel stock, BuildContext context) {
+    Navigator.of(context).push(
+      MaterialPageRoute(
+        builder: (ctx) {
+          return BuySell(
+            stock: stock,
+          );
+        },
+      ),
+    );
+  }
 
   @override
-  Widget build(BuildContext context, WidgetRef ref) {
-    final listOfWishListStocks = ref.watch(wishListProvider);
+  Widget build(BuildContext context) {
     return ListView.separated(
-      itemCount: listOfWishListStocks.length,
-      separatorBuilder: (BuildContext context, int index) {
+      separatorBuilder: (context, index) {
         return Divider(
           color: Colors.grey.shade400,
         );
       },
+      itemCount: stocks.length,
       itemBuilder: (context, index) {
-        final shortName = listOfWishListStocks[index].shortName;
-        final longName = listOfWishListStocks[index].longName;
-        double? price = listOfWishListStocks[index].price;
-        double? changeInPrice = listOfWishListStocks[index].changeInPrice;
-
+        final longName = stocks[index].longName;
+        final shortName = stocks[index].shortName;
+        final price = stocks[index].price;
+        final changeInPrice = stocks[index].changeInPrice;
         return ListTile(
           onTap: () {
-            Navigator.of(context).push(MaterialPageRoute(
-                builder: (ctx) => BuySell(stock: listOfWishListStocks[index])));
+            return onClick(stocks[index], context);
           },
           contentPadding: const EdgeInsets.all(10),
           title: Row(
@@ -56,6 +65,9 @@ class ShowStocks extends ConsumerWidget {
                     ),
                     Text(
                       longName,
+                      softWrap: true,
+                      maxLines: 1,
+                      overflow: TextOverflow.fade,
                       style: const TextStyle(
                         color: Colors.grey,
                         fontSize: 12,
@@ -67,7 +79,7 @@ class ShowStocks extends ConsumerWidget {
             ],
           ),
           trailing: Column(
-            mainAxisAlignment: MainAxisAlignment.end,
+            crossAxisAlignment: CrossAxisAlignment.end,
             children: [
               Text(
                 price.toStringAsFixed(2),
