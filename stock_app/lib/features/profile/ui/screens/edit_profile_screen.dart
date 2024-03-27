@@ -13,6 +13,7 @@ class EditProfileScreen extends StatefulWidget {
 }
 
 class _EditProfileScreenState extends State<EditProfileScreen> {
+  final user = FirebaseAuth.instance.currentUser!;
   final username = TextEditingController();
   final phoneNumber = TextEditingController();
   final email = TextEditingController();
@@ -42,7 +43,6 @@ class _EditProfileScreenState extends State<EditProfileScreen> {
   }
 
   Future _getUser() async {
-    final user = FirebaseAuth.instance.currentUser!;
     final userData =
         await FirebaseFirestore.instance.collection('user').doc(user.uid).get();
     username.text = userData.data()!['username'];
