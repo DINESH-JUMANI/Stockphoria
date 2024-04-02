@@ -1,8 +1,9 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:email_validator/email_validator.dart';
 import 'package:flutter/material.dart';
-import 'package:stock_app/features/auth/screens/login_screen.dart';
+import 'package:stock_app/features/auth/ui/screens/login_screen.dart';
 import 'package:firebase_auth/firebase_auth.dart';
-import 'package:stock_app/features/auth/screens/verify_email.dart';
+import 'package:stock_app/features/auth/ui/screens/verify_email.dart';
 
 final _firebase = FirebaseAuth.instance;
 
@@ -112,10 +113,11 @@ class _RegistrationScreenState extends State<RegistrationScreen> {
                           autocorrect: false,
                           textCapitalization: TextCapitalization.none,
                           validator: (value) {
-                            if (value == null ||
-                                value.trim().isEmpty ||
-                                !value.contains('@')) {
-                              return 'Please enter a valid email address';
+                            String isValid =
+                                EmailValidator.validate(value.toString().trim())
+                                    .toString();
+                            if (isValid == "false") {
+                              return "Enter a valid email";
                             }
                             return null;
                           },

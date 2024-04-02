@@ -1,10 +1,10 @@
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:stock_app/features/auth/screens/login_screen.dart';
+import 'package:stock_app/features/auth/ui/screens/login_screen.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:stock_app/tabs.dart';
-import 'firebase_options.dart';
+import 'database-operations/firebase_options.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
@@ -17,8 +17,9 @@ void main() async {
       if (snapshot.connectionState == ConnectionState.waiting) {
         return const CircularProgressIndicator();
       }
+      final user = FirebaseAuth.instance.currentUser;
 
-      if (snapshot.hasData) {
+      if (user != null && snapshot.hasData && user.emailVerified) {
         return const Tabs();
       }
 

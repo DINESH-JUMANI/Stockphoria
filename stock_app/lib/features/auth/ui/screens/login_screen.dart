@@ -1,9 +1,11 @@
+import 'dart:developer';
+
+import 'package:email_validator/email_validator.dart';
 import 'package:flutter/material.dart';
-import 'package:stock_app/features/auth/screens/registartion_screen.dart';
+import 'package:stock_app/features/auth/ui/screens/forgot_password.dart';
+import 'package:stock_app/features/auth/ui/screens/registartion_screen.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:stock_app/tabs.dart';
-
-final _firebase = FirebaseAuth.instance;
 
 class LoginScreen extends StatefulWidget {
   const LoginScreen({Key? key}) : super(key: key);
@@ -22,8 +24,22 @@ class _LoginScreenState extends State<LoginScreen> {
   void _submit() async {
     final isValid = _formKey.currentState!.validate();
     if (!isValid) return;
-
     _formKey.currentState!.save();
+    final _firebase = await FirebaseAuth.instance;
+    final user = _firebase.currentUser;
+    if (user != null) await FirebaseAuth.instance.currentUser!.reload();
+
+    log(user.toString());
+    if (user != null && !user.emailVerified) {
+      ScaffoldMessenger.of(context).clearSnackBars();
+      ScaffoldMessenger.of(context).showSnackBar(
+        const SnackBar(
+          content: Text('Please Verify Email'),
+        ),
+      );
+      return;
+    }
+
     try {
       await _firebase.signInWithEmailAndPassword(
           email: _enteredEmail, password: _enteredPassword);
@@ -104,10 +120,11 @@ class _LoginScreenState extends State<LoginScreen> {
                             autocorrect: false,
                             textCapitalization: TextCapitalization.none,
                             validator: (value) {
-                              if (value == null ||
-                                  value.trim().isEmpty ||
-                                  !value.contains('@')) {
-                                return 'Please enter a valid email address';
+                              String isValid = EmailValidator.validate(
+                                      value.toString().trim())
+                                  .toString();
+                              if (isValid == "false") {
+                                return "Enter a valid email";
                               }
                               return null;
                             },
@@ -175,7 +192,7 @@ class _LoginScreenState extends State<LoginScreen> {
                       ),
                     ),
                   ),
-                  const SizedBox(height: 5),
+                  const SizedBox(height: 10),
                   ElevatedButton(
                     style: const ButtonStyle(
                       backgroundColor: MaterialStatePropertyAll(Colors.black),
@@ -191,6 +208,23 @@ class _LoginScreenState extends State<LoginScreen> {
                       'New to Application? Register Here',
                       style: TextStyle(
                         color: Colors.white,
+                        fontSize: 18,
+                      ),
+                    ),
+                  ),
+                  const SizedBox(height: 10),
+                  TextButton(
+                    onPressed: () {
+                      Navigator.of(context).push(
+                        MaterialPageRoute(
+                          builder: (ctx) => const ForgotPassword(),
+                        ),
+                      );
+                    },
+                    child: Text(
+                      'Forgot password',
+                      style: TextStyle(
+                        color: Colors.blue.shade900,
                         fontSize: 18,
                       ),
                     ),

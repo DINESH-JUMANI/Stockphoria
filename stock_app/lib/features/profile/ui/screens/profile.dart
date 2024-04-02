@@ -2,7 +2,7 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_spinkit/flutter_spinkit.dart';
-import 'package:stock_app/features/auth/screens/login_screen.dart';
+import 'package:stock_app/features/auth/ui/screens/login_screen.dart';
 import 'package:stock_app/features/profile/ui/screens/about_us.dart';
 import 'package:stock_app/features/profile/ui/screens/portfolio.dart';
 import 'package:stock_app/features/profile/ui/screens/support.dart';
