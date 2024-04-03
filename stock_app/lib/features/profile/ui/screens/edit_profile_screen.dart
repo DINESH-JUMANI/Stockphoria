@@ -1,9 +1,11 @@
+import 'dart:developer';
 import 'dart:io';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
+import 'package:firebase_storage/firebase_storage.dart';
 import 'package:flutter/material.dart';
-
 import 'package:image_picker/image_picker.dart';
+import 'package:stock_app/tabs.dart';
 
 class EditProfileScreen extends StatefulWidget {
   const EditProfileScreen({super.key});
@@ -13,16 +15,18 @@ class EditProfileScreen extends StatefulWidget {
 }
 
 class _EditProfileScreenState extends State<EditProfileScreen> {
-  final user = FirebaseAuth.instance.currentUser!;
+  final _user = FirebaseAuth.instance.currentUser!;
+  final _db = FirebaseFirestore.instance;
+  final _storage = FirebaseStorage.instance;
   final username = TextEditingController();
   final phoneNumber = TextEditingController();
   final email = TextEditingController();
   final newPassword = TextEditingController();
   final oldPassword = TextEditingController();
+  String imageUrl = "";
   String password = '';
   final _formKey = GlobalKey<FormState>();
-  File _selectedImage = File(
-      'https://icons.veryicon.com/png/o/internet--web/55-common-web-icons/person-4.png');
+  File? _selectedImage;
 
   @override
   void initState() {
@@ -33,9 +37,39 @@ class _EditProfileScreenState extends State<EditProfileScreen> {
     super.initState();
   }
 
-  Future _pickImage() async {
-    final chosenImage =
-        await ImagePicker().pickImage(source: ImageSource.gallery);
+  showImagePickMenu() {
+    return showDialog(
+        context: context,
+        builder: (BuildContext context) {
+          return AlertDialog(
+            title: Text('Pick Image from'),
+            content: Column(
+              mainAxisSize: MainAxisSize.min,
+              children: [
+                ListTile(
+                  onTap: () {
+                    _pickImage(ImageSource.camera);
+                    Navigator.pop(context);
+                  },
+                  leading: Icon(Icons.camera_alt),
+                  title: Text('Camera'),
+                ),
+                ListTile(
+                  onTap: () {
+                    _pickImage(ImageSource.gallery);
+                    Navigator.pop(context);
+                  },
+                  leading: Icon(Icons.image),
+                  title: Text('Gallery'),
+                ),
+              ],
+            ),
+          );
+        });
+  }
+
+  Future _pickImage(ImageSource source) async {
+    final chosenImage = await ImagePicker().pickImage(source: source);
     if (chosenImage == null) return;
     setState(() {
       _selectedImage = File(chosenImage.path);
@@ -43,17 +77,71 @@ class _EditProfileScreenState extends State<EditProfileScreen> {
   }
 
   Future _getUser() async {
-    final userData =
-        await FirebaseFirestore.instance.collection('user').doc(user.uid).get();
+    await _user.reload();
+    final userData = await _db.collection('user').doc(_user.uid).get();
     username.text = userData.data()!['username'];
     phoneNumber.text = userData.data()!['phone_number'];
     email.text = userData.data()!['email'];
     password = userData.data()!['password'];
+    imageUrl = userData.data()!['profile_pic'];
+    _selectedImage = File(imageUrl);
   }
 
-  void _saveChanges() {
+  void _saveChanges() async {
     final isValid = _formKey.currentState!.validate();
     if (!isValid) return;
+    if (newPassword.text.isNotEmpty && oldPassword.text.isNotEmpty) {
+      if (oldPassword.text != password) {
+        ScaffoldMessenger.of(context).clearSnackBars();
+        ScaffoldMessenger.of(context).showSnackBar(
+          const SnackBar(
+            backgroundColor: Colors.red,
+            content: Text('Old password does not match with existing password'),
+          ),
+        );
+        return;
+      }
+    } else if (oldPassword.text.isEmpty && newPassword.text.isNotEmpty ||
+        oldPassword.text.isNotEmpty && newPassword.text.isEmpty) {
+      ScaffoldMessenger.of(context).clearSnackBars();
+      ScaffoldMessenger.of(context).showSnackBar(
+        const SnackBar(
+          backgroundColor: Colors.red,
+          content: Text('Enter the requireed password field'),
+        ),
+      );
+      return;
+    }
+    try {
+      UploadTask uploadTask = _storage
+          .ref("Profile Pics")
+          .child(email.text.toString())
+          .putFile(_selectedImage!);
+      TaskSnapshot taskSnapshot = await uploadTask;
+      String url = await taskSnapshot.ref.getDownloadURL();
+      _db.collection('user').doc(_user.uid).update({
+        'username': username.text,
+        'phone_number': phoneNumber.text,
+        'email': email.text,
+        'password': newPassword.text,
+        'profile_pic': url,
+      });
+    } on FirebaseAuthException catch (e) {
+      log(e.toString());
+    }
+    ScaffoldMessenger.of(context).clearSnackBars();
+    ScaffoldMessenger.of(context).showSnackBar(
+      const SnackBar(
+        backgroundColor: Colors.green,
+        content: Text('Changes Saved Successfully'),
+      ),
+    );
+    Navigator.pushReplacement(
+      context,
+      MaterialPageRoute(
+        builder: (_) => Tabs(),
+      ),
+    );
   }
 
   @override
@@ -78,15 +166,25 @@ class _EditProfileScreenState extends State<EditProfileScreen> {
             children: [
               Row(
                 children: [
-                  CircleAvatar(
-                    backgroundImage: FileImage(_selectedImage),
-                    radius: 35,
-                    backgroundColor: Colors.black,
-                  ),
+                  _selectedImage != null
+                      ? CircleAvatar(
+                          backgroundImage: FileImage(_selectedImage!),
+                          radius: 35,
+                          backgroundColor: Colors.black,
+                        )
+                      : CircleAvatar(
+                          maxRadius: 35,
+                          backgroundColor: Colors.black,
+                          foregroundColor: Colors.white,
+                          child: Icon(
+                            Icons.person,
+                            size: 35,
+                          ),
+                        ),
                   const SizedBox(width: 30),
                   ElevatedButton(
                     onPressed: () {
-                      _pickImage();
+                      showImagePickMenu();
                     },
                     child: const Text('Change'),
                   ),
@@ -206,14 +304,6 @@ class _EditProfileScreenState extends State<EditProfileScreen> {
                             fontSize: 15,
                           ),
                         ),
-                        validator: (value) {
-                          if (value == null || value.length == 0) {
-                            return null;
-                          } else if (value != password) {
-                            return 'Enter valid password';
-                          }
-                          return null;
-                        },
                       ),
                     ),
                     Container(

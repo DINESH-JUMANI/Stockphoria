@@ -33,11 +33,14 @@ class _ProfileScreenState extends State<ProfileScreen> {
   }
 
   String username = "Profile";
+  String imageUrl = "";
   Future _getUser() async {
     final user = FirebaseAuth.instance.currentUser!;
+    await user.reload();
     final userData =
         await FirebaseFirestore.instance.collection('user').doc(user.uid).get();
     username = userData.data()!['username'];
+    imageUrl = userData.data()!['profile_pic'];
   }
 
   List<IconData> icons = [
@@ -98,43 +101,42 @@ class _ProfileScreenState extends State<ProfileScreen> {
           children: [
             GestureDetector(
               onTap: () {
-                Navigator.push(context,
-                    MaterialPageRoute(builder: (_) => EditProfileScreen()));
+                Navigator.push(
+                  context,
+                  MaterialPageRoute(
+                    builder: (_) => EditProfileScreen(),
+                  ),
+                );
               },
               child: Card(
                 color: Colors.grey.shade300,
                 child: Center(
                   child: Padding(
                     padding: const EdgeInsets.all(20.0),
-                    child: Column(
-                      children: [
-                        const CircleAvatar(
-                          maxRadius: 30,
-                          backgroundColor: Colors.black,
-                          foregroundColor: Colors.white,
-                          child: Icon(
-                            Icons.person,
-                            size: 30,
-                          ),
-                        ),
-                        const SizedBox(height: 10),
-                        FutureBuilder(
-                          future: _getUser(),
-                          builder: (context, snapshot) {
-                            if (snapshot.connectionState !=
-                                ConnectionState.done) {
-                              return const SpinKitCircle(
-                                size: 50,
-                                color: Colors.black,
-                              );
-                            }
-                            return Text(
+                    child: FutureBuilder(
+                      future: _getUser(),
+                      builder: (context, snapshot) {
+                        if (snapshot.connectionState != ConnectionState.done) {
+                          return const SpinKitCircle(
+                            size: 50,
+                            color: Colors.black,
+                          );
+                        }
+                        return Column(
+                          children: [
+                            CircleAvatar(
+                              maxRadius: 35,
+                              backgroundColor: Colors.white,
+                              foregroundImage: NetworkImage(imageUrl),
+                            ),
+                            const SizedBox(height: 10),
+                            Text(
                               username,
                               style: const TextStyle(fontSize: 30),
-                            );
-                          },
-                        ),
-                      ],
+                            ),
+                          ],
+                        );
+                      },
                     ),
                   ),
                 ),

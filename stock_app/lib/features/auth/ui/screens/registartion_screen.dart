@@ -38,6 +38,8 @@ class _RegistrationScreenState extends State<RegistrationScreen> {
         'phone_number': _enteredPhoneNumber,
         'email': _enteredEmail,
         'password': _enteredPassword,
+        'profile_pic':
+            "https://static.vecteezy.com/system/resources/thumbnails/019/060/628/small_2x/albums-icon-free-vector.jpg"
       });
     } on FirebaseAuthException catch (error) {
       ScaffoldMessenger.of(context).clearSnackBars();

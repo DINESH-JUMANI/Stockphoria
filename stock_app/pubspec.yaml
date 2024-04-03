@@ -50,6 +50,7 @@ dependencies:
   bloc: ^8.1.4
   flutter_bloc: ^8.1.5
   email_validator: ^2.1.17
+  firebase_storage: ^11.6.9
 
 dev_dependencies:
   flutter_test:
