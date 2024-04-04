@@ -84,12 +84,11 @@ class _ProfileScreenState extends State<ProfileScreen> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: const Center(
-          child: Text(
-            'Profile',
-            style: TextStyle(
-              color: Colors.white,
-            ),
+        centerTitle: true,
+        title: Text(
+          'Profile',
+          style: TextStyle(
+            color: Colors.white,
           ),
         ),
         backgroundColor: Colors.black,
@@ -130,9 +129,16 @@ class _ProfileScreenState extends State<ProfileScreen> {
                               foregroundImage: NetworkImage(imageUrl),
                             ),
                             const SizedBox(height: 10),
-                            Text(
-                              username,
-                              style: const TextStyle(fontSize: 30),
+                            Row(
+                              mainAxisAlignment: MainAxisAlignment.center,
+                              children: [
+                                Text(
+                                  username,
+                                  style: const TextStyle(fontSize: 30),
+                                ),
+                                const SizedBox(width: 10),
+                                Icon(Icons.edit),
+                              ],
                             ),
                           ],
                         );

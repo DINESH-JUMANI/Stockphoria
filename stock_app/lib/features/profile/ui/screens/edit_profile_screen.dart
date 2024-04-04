@@ -27,14 +27,12 @@ class _EditProfileScreenState extends State<EditProfileScreen> {
   String password = '';
   final _formKey = GlobalKey<FormState>();
   File? _selectedImage;
+  ImageProvider? _imageProvider;
 
   @override
   void initState() {
-    setState(() {
-      _getUser();
-    });
-
     super.initState();
+    _getUser();
   }
 
   showImagePickMenu() {
@@ -73,6 +71,7 @@ class _EditProfileScreenState extends State<EditProfileScreen> {
     if (chosenImage == null) return;
     setState(() {
       _selectedImage = File(chosenImage.path);
+      _imageProvider = FileImage(_selectedImage!);
     });
   }
 
@@ -84,7 +83,8 @@ class _EditProfileScreenState extends State<EditProfileScreen> {
     email.text = userData.data()!['email'];
     password = userData.data()!['password'];
     imageUrl = userData.data()!['profile_pic'];
-    _selectedImage = File(imageUrl);
+    _imageProvider = NetworkImage(imageUrl);
+    setState(() {});
   }
 
   void _saveChanges() async {
@@ -112,23 +112,27 @@ class _EditProfileScreenState extends State<EditProfileScreen> {
       );
       return;
     }
-    try {
-      UploadTask uploadTask = _storage
-          .ref("Profile Pics")
-          .child(email.text.toString())
-          .putFile(_selectedImage!);
-      TaskSnapshot taskSnapshot = await uploadTask;
-      String url = await taskSnapshot.ref.getDownloadURL();
-      _db.collection('user').doc(_user.uid).update({
-        'username': username.text,
-        'phone_number': phoneNumber.text,
-        'email': email.text,
-        'password': newPassword.text,
-        'profile_pic': url,
-      });
-    } on FirebaseAuthException catch (e) {
-      log(e.toString());
+    if (_selectedImage != null) {
+      try {
+        UploadTask uploadTask = _storage
+            .ref("Profile Pics")
+            .child(email.text.toString())
+            .putFile(_selectedImage!);
+        TaskSnapshot taskSnapshot = await uploadTask;
+        String url = await taskSnapshot.ref.getDownloadURL();
+        _db.collection('user').doc(_user.uid).update({
+          'profile_pic': url,
+        });
+      } on FirebaseAuthException catch (e) {
+        log(e.toString());
+      }
     }
+    _db.collection('user').doc(_user.uid).update({
+      'username': username.text,
+      'phone_number': phoneNumber.text,
+      'email': email.text,
+      'password': newPassword.text,
+    });
     ScaffoldMessenger.of(context).clearSnackBars();
     ScaffoldMessenger.of(context).showSnackBar(
       const SnackBar(
@@ -136,12 +140,15 @@ class _EditProfileScreenState extends State<EditProfileScreen> {
         content: Text('Changes Saved Successfully'),
       ),
     );
+
+    Navigator.pop(context);
     Navigator.pushReplacement(
       context,
       MaterialPageRoute(
         builder: (_) => Tabs(),
       ),
     );
+    return;
   }
 
   @override
@@ -166,21 +173,11 @@ class _EditProfileScreenState extends State<EditProfileScreen> {
             children: [
               Row(
                 children: [
-                  _selectedImage != null
-                      ? CircleAvatar(
-                          backgroundImage: FileImage(_selectedImage!),
-                          radius: 35,
-                          backgroundColor: Colors.black,
-                        )
-                      : CircleAvatar(
-                          maxRadius: 35,
-                          backgroundColor: Colors.black,
-                          foregroundColor: Colors.white,
-                          child: Icon(
-                            Icons.person,
-                            size: 35,
-                          ),
-                        ),
+                  CircleAvatar(
+                    backgroundImage: _imageProvider,
+                    radius: 35,
+                    backgroundColor: Colors.black,
+                  ),
                   const SizedBox(width: 30),
                   ElevatedButton(
                     onPressed: () {
