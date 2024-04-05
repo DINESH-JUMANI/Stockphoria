@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:stock_app/database-operations/balance_handler.dart';
+import 'package:stock_app/features/wallet/repo/balance_repo.dart';
 import 'package:stock_app/database-operations/portfolio_handler.dart';
 import 'package:stock_app/features/stock/model/buyed_stocks.dart';
 import 'package:stock_app/features/stock/model/stock_model.dart';
@@ -53,7 +53,7 @@ class _BuySellState extends ConsumerState<BuySell> {
       return;
     }
     ref.watch(balanceProvider.notifier).remove(totalPrice.toString());
-    BalanceHandler().add(ref);
+    BalanceRepo().add(ref);
 
     for (var element in ref.watch(buyedStocksProvider)) {
       if (element.stockName == widget.stock.longName) {
@@ -138,7 +138,7 @@ class _BuySellState extends ConsumerState<BuySell> {
         ref.watch(buyedStocksProvider.notifier).add(stock);
         PortfolioHandler().add(ref);
         ref.watch(balanceProvider.notifier).add(earnedMoney.toString());
-        BalanceHandler().add(ref);
+        BalanceRepo().add(ref);
         isPresent = true;
         if (quantityBuyed == 0) {
           ref.watch(buyedStocksProvider.notifier).remove(stock);

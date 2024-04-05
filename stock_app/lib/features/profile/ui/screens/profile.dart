@@ -6,8 +6,8 @@ import 'package:stock_app/features/auth/ui/screens/login_screen.dart';
 import 'package:stock_app/features/profile/ui/screens/about_us.dart';
 import 'package:stock_app/features/profile/ui/screens/portfolio.dart';
 import 'package:stock_app/features/profile/ui/screens/support.dart';
-import 'package:stock_app/features/profile/ui/screens/wallet.dart';
 import 'package:stock_app/features/profile/ui/screens/edit_profile_screen.dart';
+import 'package:stock_app/features/wallet/ui/wallet.dart';
 
 class ProfileScreen extends StatefulWidget {
   const ProfileScreen({Key? key}) : super(key: key);
@@ -70,7 +70,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
           .push(MaterialPageRoute(builder: (ctx) => const PortfolioScreen()));
     } else if (index == 1) {
       Navigator.of(context)
-          .push(MaterialPageRoute(builder: (ctx) => const WalletScreeen()));
+          .push(MaterialPageRoute(builder: (ctx) => const WalletScreen()));
     } else if (index == 2) {
       Navigator.of(context)
           .push(MaterialPageRoute(builder: (ctx) => const SupportScreen()));

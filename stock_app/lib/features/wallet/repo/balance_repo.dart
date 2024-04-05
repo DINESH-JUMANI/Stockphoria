@@ -5,7 +5,7 @@ import 'package:stock_app/providers/balance.dart';
 
 final user = FirebaseAuth.instance.currentUser!;
 
-class BalanceHandler {
+class BalanceRepo {
   void add(WidgetRef ref) async {
     await FirebaseFirestore.instance
         .collection('balance')
