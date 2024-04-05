@@ -10,10 +10,22 @@ class ChartScreen extends StatelessWidget {
     return Scaffold(
       backgroundColor: Colors.black,
       appBar: AppBar(
+        centerTitle: true,
         foregroundColor: Colors.white,
         backgroundColor: Colors.black,
+        title: Text(symbol),
       ),
-      body: ShowChart(symbol: symbol),
+      body: SingleChildScrollView(
+        scrollDirection: Axis.horizontal,
+        child: Container(
+          width: 2000,
+          child: ShowChart(
+            symbol: symbol,
+            interval: "1d",
+            range: "5y",
+          ),
+        ),
+      ),
     );
   }
 }

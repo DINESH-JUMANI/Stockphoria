@@ -7,7 +7,7 @@ import 'package:http/http.dart' as http;
 class StockRepo {
   Future<List<StockModel>> fetchStocks() async {
     const Map<String, String> headers = {
-      'X-RapidAPI-Key': '6686ddb192msh51cfde97ac51e37p15b3c3jsnff7c09036e21',
+      'X-RapidAPI-Key': '68272d0210msh36ad4e17686d6cap10ab4fjsn59546b123a8c',
       'X-RapidAPI-Host': 'yh-finance.p.rapidapi.com'
     };
     List<StockModel> stocks = [];
@@ -23,6 +23,11 @@ class StockRepo {
         final price = stocksData[i]['regularMarketPrice'];
         final changeInPrice = stocksData[i]['regularMarketChangePercent'];
         final symbol = stocksData[i]['symbol'];
+        if (shortName == null ||
+            longName == null ||
+            price == null ||
+            changeInPrice == null ||
+            symbol == null) continue;
         StockModel val = StockModel(
           shortName: shortName,
           longName: longName,
@@ -33,7 +38,7 @@ class StockRepo {
         stocks.add(val);
       }
     } catch (e) {
-      log(e.toString());
+      log("Stock repo---" + e.toString());
     }
     return stocks;
   }

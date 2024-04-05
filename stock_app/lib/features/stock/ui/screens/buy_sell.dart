@@ -191,9 +191,18 @@ class _BuySellState extends ConsumerState<BuySell> {
     });
   }
 
+  String range = "1y";
+  String interval = "1d";
+  @override
+  void dispose() {
+    _quantityController.dispose();
+    super.dispose();
+  }
+
   @override
   Widget build(BuildContext context) {
     final double availableBalance = ref.watch(balanceProvider);
+
     var listOfStocks = ref.watch(buyedStocksProvider);
     int buyedQuantity = 0;
     for (var element in listOfStocks) {
@@ -244,10 +253,63 @@ class _BuySellState extends ConsumerState<BuySell> {
                   width: double.infinity,
                   child: ShowChart(
                     symbol: widget.stock.symbol,
+                    interval: interval,
+                    range: range,
                   ),
                 ),
               ),
-              SizedBox(height: 50),
+              SizedBox(height: 10),
+              Row(
+                mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                children: [
+                  ElevatedButton(
+                    onPressed: () {
+                      setState(() {
+                        range = "1d";
+                        interval = "60m";
+                      });
+                    },
+                    child: Text('1D'),
+                  ),
+                  ElevatedButton(
+                    onPressed: () {
+                      setState(() {
+                        range = "5d";
+                        interval = "60m";
+                      });
+                    },
+                    child: Text('5D'),
+                  ),
+                  ElevatedButton(
+                    onPressed: () {
+                      setState(() {
+                        range = "5mo";
+                        interval = "1d";
+                      });
+                    },
+                    child: Text('5M'),
+                  ),
+                  ElevatedButton(
+                    onPressed: () {
+                      setState(() {
+                        range = "1y";
+                        interval = "1d";
+                      });
+                    },
+                    child: Text('1Y'),
+                  ),
+                  ElevatedButton(
+                    onPressed: () {
+                      setState(() {
+                        range = "5y";
+                        interval = "1d";
+                      });
+                    },
+                    child: Text('5Y'),
+                  ),
+                ],
+              ),
+              SizedBox(height: 30),
               TextField(
                 controller: _quantityController,
                 keyboardType: TextInputType.number,

@@ -5,5 +5,8 @@ sealed class ChartEvent {}
 
 class ChartInitialFetchEvent extends ChartEvent {
   final String symbol;
-  ChartInitialFetchEvent({required this.symbol});
+  final String range;
+  final String interval;
+  ChartInitialFetchEvent(
+      {required this.symbol, required this.interval, required this.range});
 }

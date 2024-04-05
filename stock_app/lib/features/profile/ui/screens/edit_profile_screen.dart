@@ -35,6 +35,16 @@ class _EditProfileScreenState extends State<EditProfileScreen> {
     _getUser();
   }
 
+  @override
+  void dispose() {
+    username.dispose();
+    phoneNumber.dispose();
+    email.dispose();
+    newPassword.dispose();
+    oldPassword.dispose();
+    super.dispose();
+  }
+
   showImagePickMenu() {
     return showDialog(
         context: context,

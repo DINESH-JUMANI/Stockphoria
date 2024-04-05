@@ -1,6 +1,7 @@
 import 'dart:async';
 import 'dart:developer';
 import 'package:bloc/bloc.dart';
+import 'package:flutter/material.dart';
 import 'package:meta/meta.dart';
 import 'package:stock_app/features/chart/repos/chart_repo.dart';
 
@@ -18,8 +19,8 @@ class ChartBloc extends Bloc<ChartEvent, ChartState> {
       ChartInitialFetchEvent event, Emitter<ChartState> emit) async {
     emit(ChartFetchingLoadingState());
     try {
-      List<Chart> chartValues =
-          await ChartRepo().fetchChartValues(event.symbol);
+      List<Chart> chartValues = await ChartRepo()
+          .fetchChartValues(event.symbol, event.interval, event.range);
       emit(ChartFetchingSuccessfulState(chartValues: chartValues));
     } catch (e) {
       log(e.toString());

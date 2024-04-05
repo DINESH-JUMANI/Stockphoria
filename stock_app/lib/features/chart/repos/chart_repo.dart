@@ -4,16 +4,17 @@ import 'package:stock_app/features/chart/models/chart.dart';
 import 'package:http/http.dart' as http;
 
 class ChartRepo {
-  Future<List<Chart>> fetchChartValues(String symbol) async {
+  Future<List<Chart>> fetchChartValues(
+      String symbol, String range, String interval) async {
     const Map<String, String> headers = {
-      'X-RapidAPI-Key': '6686ddb192msh51cfde97ac51e37p15b3c3jsnff7c09036e21',
+      'X-RapidAPI-Key': '68272d0210msh36ad4e17686d6cap10ab4fjsn59546b123a8c',
       'X-RapidAPI-Host': 'yh-finance.p.rapidapi.com'
     };
     List<Chart> chartValues = [];
 
     try {
       final url = Uri.parse(
-          'https://yh-finance.p.rapidapi.com/stock/v2/get-chart?interval=1d&symbol=$symbol&range=6mo&region=US');
+          'https://yh-finance.p.rapidapi.com/stock/v2/get-chart?interval=$interval&symbol=$symbol&range=$range&region=US');
       final response = await http.get(url, headers: headers);
 
       final result = jsonDecode(response.body);
@@ -33,7 +34,7 @@ class ChartRepo {
         chartValues.add(chartVal);
       }
     } catch (e) {
-      log(e.toString());
+      log("Chart repo---" + e.toString());
     }
     return chartValues;
   }

@@ -1,13 +1,23 @@
+// ignore_for_file: public_member_api_docs, sort_constructors_first
+
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_spinkit/flutter_spinkit.dart';
+import 'package:syncfusion_flutter_charts/charts.dart';
+
 import 'package:stock_app/features/chart/bloc/chart_bloc.dart';
 import 'package:stock_app/features/chart/models/chart.dart';
-import 'package:syncfusion_flutter_charts/charts.dart';
 
 class ShowChart extends StatefulWidget {
   final String symbol;
-  const ShowChart({Key? key, required this.symbol}) : super(key: key);
+  final String interval;
+  final String range;
+  const ShowChart({
+    Key? key,
+    required this.symbol,
+    required this.interval,
+    required this.range,
+  }) : super(key: key);
 
   @override
   _ShowChartState createState() => _ShowChartState();
@@ -19,10 +29,24 @@ class _ShowChartState extends State<ShowChart> {
 
   @override
   void initState() {
+    initialize();
+    super.initState();
+  }
+
+  void initialize() {
     _trackballBehavior = TrackballBehavior(
         enable: true, activationMode: ActivationMode.singleTap);
-    chartBloc.add(ChartInitialFetchEvent(symbol: widget.symbol));
-    super.initState();
+    chartBloc.add(ChartInitialFetchEvent(
+      symbol: widget.symbol,
+      interval: widget.interval,
+      range: widget.range,
+    ));
+  }
+
+  @override
+  void didUpdateWidget(covariant ShowChart oldWidget) {
+    super.didUpdateWidget(oldWidget);
+    initialize();
   }
 
   @override
@@ -44,10 +68,6 @@ class _ShowChartState extends State<ShowChart> {
           case ChartFetchingSuccessfulState:
             final successState = state as ChartFetchingSuccessfulState;
             return SfCartesianChart(
-              title: ChartTitle(
-                text: widget.symbol,
-                textStyle: TextStyle(color: Colors.white, fontSize: 20),
-              ),
               trackballBehavior: _trackballBehavior,
               series: <CandleSeries>[
                 CandleSeries<Chart, DateTime>(
