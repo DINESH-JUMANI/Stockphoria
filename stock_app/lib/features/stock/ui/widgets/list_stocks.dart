@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:stock_app/features/stock/model/stock_model.dart';
-import 'package:stock_app/features/stock/ui/screens/try_buy_sell.dart';
+import 'package:stock_app/features/stock/ui/screens/buy_sell_screen.dart';
 
 class ListStocks extends StatelessWidget {
   const ListStocks({Key? key, required this.stocks}) : super(key: key);
@@ -10,7 +10,7 @@ class ListStocks extends StatelessWidget {
     Navigator.of(context).push(
       MaterialPageRoute(
         builder: (ctx) {
-          return TryBuySell(
+          return BuySellScreen(
             stock: stock,
           );
         },

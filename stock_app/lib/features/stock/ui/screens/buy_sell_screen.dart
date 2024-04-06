@@ -2,23 +2,23 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:stock_app/features/chart/ui/screens/chart_screen.dart';
 import 'package:stock_app/features/chart/ui/widgets/show_chart.dart';
+import 'package:stock_app/common/global_widgets.dart';
 import 'package:stock_app/features/portfolio/bloc/portfolio_bloc.dart';
 import 'package:stock_app/features/portfolio/model/portfolio.dart';
 
 import 'package:stock_app/features/wallet/bloc/wallet_bloc.dart';
 import 'package:stock_app/features/stock/model/stock_model.dart';
-import 'package:stock_app/splash_screen.dart';
 
-class TryBuySell extends StatefulWidget {
+class BuySellScreen extends StatefulWidget {
   final StockModel stock;
 
-  const TryBuySell({super.key, required this.stock});
+  const BuySellScreen({super.key, required this.stock});
 
   @override
-  State<TryBuySell> createState() => _TryBuySellState();
+  State<BuySellScreen> createState() => _BuySellScreenState();
 }
 
-class _TryBuySellState extends State<TryBuySell> {
+class _BuySellScreenState extends State<BuySellScreen> {
   bool wishlist = false;
   final quantityController = TextEditingController();
   String range = "1y";
@@ -27,13 +27,7 @@ class _TryBuySellState extends State<TryBuySell> {
   List<Portfolio> buyedStocks = [];
   void buyStock() {
     if (quantityController.text.isEmpty) {
-      ScaffoldMessenger.of(context).clearSnackBars();
-      ScaffoldMessenger.of(context).showSnackBar(
-        const SnackBar(
-          backgroundColor: Colors.red,
-          content: Text('Enter Quantity'),
-        ),
-      );
+      GlobalWidgets().showSnackBar(context, Colors.red, "Enter quantity");
       return;
     }
     Portfolio portfolio;
@@ -41,13 +35,7 @@ class _TryBuySellState extends State<TryBuySell> {
     int quantityBuyed = int.parse(quantityController.text);
     double totalAmount = buyingPrice * quantityBuyed;
     if (availableBalance < totalAmount) {
-      ScaffoldMessenger.of(context).clearSnackBars();
-      ScaffoldMessenger.of(context).showSnackBar(
-        const SnackBar(
-          backgroundColor: Colors.red,
-          content: Text('Insufficient Balance'),
-        ),
-      );
+      GlobalWidgets().showSnackBar(context, Colors.red, "Insufficient Balance");
       return;
     }
     portfolio = Portfolio(
@@ -61,24 +49,12 @@ class _TryBuySellState extends State<TryBuySell> {
     walletBloc.add(BalanceDecrementEvent(totalAmount));
     portfolioBloc.add(PortfolioFetchEvent());
     walletBloc.add(BalanceFetchEvent());
-    ScaffoldMessenger.of(context).clearSnackBars();
-    ScaffoldMessenger.of(context).showSnackBar(
-      const SnackBar(
-        backgroundColor: Colors.green,
-        content: Text('Buyed Successfully'),
-      ),
-    );
+    GlobalWidgets().showSnackBar(context, Colors.green, 'Buyed Successfully');
   }
 
   void sellStock() {
     if (quantityController.text.isEmpty) {
-      ScaffoldMessenger.of(context).clearSnackBars();
-      ScaffoldMessenger.of(context).showSnackBar(
-        const SnackBar(
-          backgroundColor: Colors.red,
-          content: Text('Enter Quantity'),
-        ),
-      );
+      GlobalWidgets().showSnackBar(context, Colors.red, 'Enter Quantity');
       return;
     }
     Portfolio portfolio;
@@ -93,13 +69,8 @@ class _TryBuySellState extends State<TryBuySell> {
       }
     }
     if (availableQuantity < quantityBuyed) {
-      ScaffoldMessenger.of(context).clearSnackBars();
-      ScaffoldMessenger.of(context).showSnackBar(
-        const SnackBar(
-          backgroundColor: Colors.red,
-          content: Text('Insufficient Quantity'),
-        ),
-      );
+      GlobalWidgets()
+          .showSnackBar(context, Colors.red, 'Insufficient Quantity');
       return;
     }
     portfolio = Portfolio(
@@ -113,13 +84,7 @@ class _TryBuySellState extends State<TryBuySell> {
     walletBloc.add(BalanceIncrementEvent(totalAmount));
     portfolioBloc.add(PortfolioFetchEvent());
     walletBloc.add(BalanceFetchEvent());
-    ScaffoldMessenger.of(context).clearSnackBars();
-    ScaffoldMessenger.of(context).showSnackBar(
-      const SnackBar(
-        backgroundColor: Colors.green,
-        content: Text('Sold Successfully'),
-      ),
-    );
+    GlobalWidgets().showSnackBar(context, Colors.green, 'Sold Successfully');
   }
 
   void watchlistButton() {}
@@ -262,7 +227,7 @@ class _TryBuySellState extends State<TryBuySell> {
                 builder: (context, state) {
                   switch (state.runtimeType) {
                     case BalanceFetchingLoadingState:
-                      return SplashScreen();
+                      return GlobalWidgets().splashScreen();
                     case BalanceFetchingSuccessfulState:
                       final successState =
                           state as BalanceFetchingSuccessfulState;
@@ -303,7 +268,7 @@ class _TryBuySellState extends State<TryBuySell> {
                   int buyedQuantity = 0;
                   switch (state.runtimeType) {
                     case PortfolioFetchingLoadingState:
-                      return SplashScreen();
+                      return GlobalWidgets().splashScreen();
                     case PortfolioFetchingSuccessfulState:
                       final successsState =
                           state as PortfolioFetchingSuccessfulState;
