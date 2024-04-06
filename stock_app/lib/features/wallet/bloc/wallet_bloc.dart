@@ -18,7 +18,7 @@ class WalletBloc extends Bloc<WalletEvent, WalletState> {
       BalanceFetchEvent event, Emitter<WalletState> emit) async {
     emit(BalanceFetchingLoadingState());
     try {
-      balance = await TryBalanceRepo().fetchBalance();
+      balance = await BalanceRepo().fetchBalance();
       emit(BalanceFetchingSuccessfulState(balance: balance));
     } catch (e) {
       log("Wallet Bloc \n" + e.toString());
@@ -30,13 +30,13 @@ class WalletBloc extends Bloc<WalletEvent, WalletState> {
       BalanceIncrementEvent event, Emitter<WalletState> emit) {
     balance = balance + event.val;
     emit(BalanceIncrementState());
-    TryBalanceRepo().update(balance);
+    BalanceRepo().update(balance);
   }
 
   FutureOr<void> balanceDecrementEvent(
       BalanceDecrementEvent event, Emitter<WalletState> emit) {
     balance = balance - event.val;
     emit(BalanceDecrementState());
-    TryBalanceRepo().update(balance);
+    BalanceRepo().update(balance);
   }
 }

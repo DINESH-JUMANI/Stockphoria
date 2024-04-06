@@ -6,7 +6,7 @@ import 'package:firebase_auth/firebase_auth.dart';
 final user = FirebaseAuth.instance.currentUser!;
 final db = FirebaseFirestore.instance;
 
-class TryBalanceRepo {
+class BalanceRepo {
   void update(double balance) async {
     await db
         .collection('balance')
