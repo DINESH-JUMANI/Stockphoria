@@ -3,7 +3,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_spinkit/flutter_spinkit.dart';
 import 'package:stock_app/features/stock/bloc/stock_bloc.dart';
 import 'package:stock_app/features/stock/model/stock_model.dart';
-import 'package:stock_app/features/stock/ui/screens/buy_sell.dart';
+import 'package:stock_app/features/stock/ui/screens/try_buy_sell.dart';
 import 'package:stock_app/features/stock/ui/widgets/list_stocks.dart';
 
 class StocksScreen extends StatefulWidget {
@@ -17,7 +17,7 @@ class _StockssState extends State<StocksScreen> {
   final StockBloc stockBloc = StockBloc();
   void onClick(StockModel stock) {
     Navigator.of(context).push(MaterialPageRoute(builder: (ctx) {
-      return BuySell(
+      return TryBuySell(
         stock: stock,
       );
     }));

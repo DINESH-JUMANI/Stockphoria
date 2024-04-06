@@ -4,10 +4,10 @@ import 'package:flutter/material.dart';
 import 'package:flutter_spinkit/flutter_spinkit.dart';
 import 'package:stock_app/features/auth/ui/screens/login_screen.dart';
 import 'package:stock_app/features/profile/ui/screens/about_us.dart';
-import 'package:stock_app/features/profile/ui/screens/portfolio.dart';
+import 'package:stock_app/features/portfolio/ui/portfolio_screen.dart';
 import 'package:stock_app/features/profile/ui/screens/support.dart';
 import 'package:stock_app/features/profile/ui/screens/edit_profile_screen.dart';
-import 'package:stock_app/features/wallet/ui/wallet.dart';
+import 'package:stock_app/features/wallet/ui/wallet_screen.dart';
 
 class ProfileScreen extends StatefulWidget {
   const ProfileScreen({Key? key}) : super(key: key);

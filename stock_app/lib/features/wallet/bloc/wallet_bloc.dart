@@ -1,10 +1,8 @@
 import 'dart:async';
 import 'dart:developer';
-
 import 'package:bloc/bloc.dart';
 import 'package:meta/meta.dart';
 import 'package:stock_app/features/wallet/repo/try_balance_repo.dart';
-
 part 'wallet_event.dart';
 part 'wallet_state.dart';
 
@@ -23,7 +21,7 @@ class WalletBloc extends Bloc<WalletEvent, WalletState> {
       balance = await TryBalanceRepo().fetchBalance();
       emit(BalanceFetchingSuccessfulState(balance: balance));
     } catch (e) {
-      log("balance fetch----" + e.toString());
+      log("Wallet Bloc \n" + e.toString());
       emit(BalanceFetchingErrorState());
     }
   }

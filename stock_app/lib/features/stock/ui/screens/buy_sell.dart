@@ -23,6 +23,12 @@ class _BuySellState extends ConsumerState<BuySell> {
   bool wishlist = false;
   final _quantityController = TextEditingController();
 
+  @override
+  void dispose() {
+    _quantityController.dispose();
+    super.dispose();
+  }
+
   void _buyStock() {
     if (_quantityController.text.isEmpty) {
       ScaffoldMessenger.of(context).clearSnackBars();
@@ -168,7 +174,7 @@ class _BuySellState extends ConsumerState<BuySell> {
     }
   }
 
-  void onClick() {
+  void watchlistButton() {
     setState(() {
       wishlist = ref
           .read(wishListProvider.notifier)
@@ -193,11 +199,6 @@ class _BuySellState extends ConsumerState<BuySell> {
 
   String range = "1y";
   String interval = "1d";
-  @override
-  void dispose() {
-    _quantityController.dispose();
-    super.dispose();
-  }
 
   @override
   Widget build(BuildContext context) {
@@ -217,7 +218,7 @@ class _BuySellState extends ConsumerState<BuySell> {
         centerTitle: true,
         actions: [
           InkWell(
-            onTap: onClick,
+            onTap: watchlistButton,
             child: wishlist
                 ? const Icon(Icons.bookmark)
                 : const Icon(Icons.bookmark_border),
