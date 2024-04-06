@@ -7,12 +7,12 @@ sealed class PortfolioEvent {}
 
 class PortfolioFetchEvent extends PortfolioEvent {}
 
-class PortfolioAddEvent extends PortfolioEvent {
+class PortfolioBuyEvent extends PortfolioEvent {
   Portfolio portfolio;
-  PortfolioAddEvent(this.portfolio);
+  PortfolioBuyEvent(this.portfolio);
 }
 
-class PortfolioRemoveEvent extends PortfolioEvent {
+class PortfolioSellEvent extends PortfolioEvent {
   Portfolio portfolio;
-  PortfolioRemoveEvent(this.portfolio);
+  PortfolioSellEvent(this.portfolio);
 }

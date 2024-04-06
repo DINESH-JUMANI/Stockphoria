@@ -13,8 +13,8 @@ part 'portfolio_state.dart';
 class PortfolioBloc extends Bloc<PortfolioEvent, PortfolioState> {
   PortfolioBloc() : super(PortfolioInitial()) {
     on<PortfolioFetchEvent>(portfolioFetchEvent);
-    on<PortfolioAddEvent>(portfolioAddEvent);
-    on<PortfolioRemoveEvent>(portfolioRemoveEvent);
+    on<PortfolioBuyEvent>(portfolioBuyEvent);
+    on<PortfolioSellEvent>(portfolioSellEvent);
   }
 
   List<Portfolio> portfolio = [];
@@ -31,26 +31,52 @@ class PortfolioBloc extends Bloc<PortfolioEvent, PortfolioState> {
     }
   }
 
-  FutureOr<void> portfolioAddEvent(
-      PortfolioAddEvent event, Emitter<PortfolioState> emit) {
+  FutureOr<void> portfolioBuyEvent(
+      PortfolioBuyEvent event, Emitter<PortfolioState> emit) async {
+    Portfolio portfolioUpdated = event.portfolio;
     bool isPresent = false;
     for (int i = 0; i < portfolio.length; i++) {
-      if (portfolio[i].stockName == event.portfolio.stockName) {
-        portfolio[i] = event.portfolio;
+      if (event.portfolio.stockName == portfolio[i].stockName) {
         isPresent = true;
+        double buyingPrice =
+            (event.portfolio.buyingPrice + portfolio[i].buyingPrice) / 2;
+        int quantityBuyed =
+            (event.portfolio.quantityBuyed + portfolio[i].quantityBuyed);
+        portfolioUpdated = Portfolio(
+            userId: portfolio[i].userId,
+            stockName: event.portfolio.stockName,
+            buyingPrice: buyingPrice,
+            quantityBuyed: quantityBuyed,
+            totalAmount: buyingPrice * quantityBuyed);
       }
     }
-    if (!isPresent) portfolio.add(event.portfolio);
-    emit(PortfolioAddState());
+    if (isPresent) {
+      PortfolioRepo().update(portfolioUpdated);
+    }
+    if (!isPresent) {
+      PortfolioRepo().add(portfolioUpdated, portfolio.length.toString());
+    }
+    emit(PortfolioBuyState());
   }
 
-  FutureOr<void> portfolioRemoveEvent(
-      PortfolioRemoveEvent event, Emitter<PortfolioState> emit) {
+  FutureOr<void> portfolioSellEvent(
+      PortfolioSellEvent event, Emitter<PortfolioState> emit) {
+    Portfolio portfolioUpdated = event.portfolio;
     for (int i = 0; i < portfolio.length; i++) {
-      if (portfolio[i].stockName == event.portfolio.stockName) {
-        portfolio[i] = event.portfolio;
+      if (event.portfolio.stockName == portfolio[i].stockName) {
+        double buyingPrice =
+            (event.portfolio.buyingPrice + portfolio[i].buyingPrice) / 2;
+        int quantityBuyed =
+            (portfolio[i].quantityBuyed - event.portfolio.quantityBuyed);
+        portfolioUpdated = Portfolio(
+            userId: portfolio[i].userId,
+            stockName: event.portfolio.stockName,
+            buyingPrice: buyingPrice,
+            quantityBuyed: quantityBuyed,
+            totalAmount: buyingPrice * quantityBuyed);
       }
     }
-    emit(PortfolioRemoveState());
+    PortfolioRepo().update(portfolioUpdated);
+    emit(PortfolioSellState());
   }
 }

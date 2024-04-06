@@ -16,6 +16,6 @@ class PortfolioFetchingSuccessfulState extends PortfolioState {
   PortfolioFetchingSuccessfulState({required this.portfolio});
 }
 
-class PortfolioAddState extends PortfolioActionState {}
+class PortfolioBuyState extends PortfolioActionState {}
 
-class PortfolioRemoveState extends PortfolioActionState {}
+class PortfolioSellState extends PortfolioActionState {}

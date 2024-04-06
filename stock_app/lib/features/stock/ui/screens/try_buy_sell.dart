@@ -23,9 +23,104 @@ class _TryBuySellState extends State<TryBuySell> {
   final quantityController = TextEditingController();
   String range = "1y";
   String interval = "1d";
-  void _buyStock() {}
+  double availableBalance = 0;
+  List<Portfolio> buyedStocks = [];
+  void buyStock() {
+    if (quantityController.text.isEmpty) {
+      ScaffoldMessenger.of(context).clearSnackBars();
+      ScaffoldMessenger.of(context).showSnackBar(
+        const SnackBar(
+          backgroundColor: Colors.red,
+          content: Text('Enter Quantity'),
+        ),
+      );
+      return;
+    }
+    Portfolio portfolio;
+    double buyingPrice = widget.stock.price;
+    int quantityBuyed = int.parse(quantityController.text);
+    double totalAmount = buyingPrice * quantityBuyed;
+    if (availableBalance < totalAmount) {
+      ScaffoldMessenger.of(context).clearSnackBars();
+      ScaffoldMessenger.of(context).showSnackBar(
+        const SnackBar(
+          backgroundColor: Colors.red,
+          content: Text('Insufficient Balance'),
+        ),
+      );
+      return;
+    }
+    portfolio = Portfolio(
+      userId: "user",
+      stockName: widget.stock.shortName,
+      buyingPrice: buyingPrice,
+      quantityBuyed: quantityBuyed,
+      totalAmount: totalAmount,
+    );
+    portfolioBloc.add(PortfolioBuyEvent(portfolio));
+    walletBloc.add(BalanceDecrementEvent(totalAmount));
+    portfolioBloc.add(PortfolioFetchEvent());
+    walletBloc.add(BalanceFetchEvent());
+    ScaffoldMessenger.of(context).clearSnackBars();
+    ScaffoldMessenger.of(context).showSnackBar(
+      const SnackBar(
+        backgroundColor: Colors.green,
+        content: Text('Buyed Successfully'),
+      ),
+    );
+  }
 
-  void _sellStock() {}
+  void sellStock() {
+    if (quantityController.text.isEmpty) {
+      ScaffoldMessenger.of(context).clearSnackBars();
+      ScaffoldMessenger.of(context).showSnackBar(
+        const SnackBar(
+          backgroundColor: Colors.red,
+          content: Text('Enter Quantity'),
+        ),
+      );
+      return;
+    }
+    Portfolio portfolio;
+    double buyingPrice = widget.stock.price;
+    int quantityBuyed = int.parse(quantityController.text);
+    double totalAmount = buyingPrice * quantityBuyed;
+    int availableQuantity = 0;
+    for (int i = 0; i < buyedStocks.length; i++) {
+      if (buyedStocks[i].stockName == widget.stock.shortName) {
+        availableQuantity = buyedStocks[i].quantityBuyed;
+        break;
+      }
+    }
+    if (availableQuantity < quantityBuyed) {
+      ScaffoldMessenger.of(context).clearSnackBars();
+      ScaffoldMessenger.of(context).showSnackBar(
+        const SnackBar(
+          backgroundColor: Colors.red,
+          content: Text('Insufficient Quantity'),
+        ),
+      );
+      return;
+    }
+    portfolio = Portfolio(
+      userId: "user",
+      stockName: widget.stock.shortName,
+      buyingPrice: buyingPrice,
+      quantityBuyed: quantityBuyed,
+      totalAmount: totalAmount,
+    );
+    portfolioBloc.add(PortfolioSellEvent(portfolio));
+    walletBloc.add(BalanceIncrementEvent(totalAmount));
+    portfolioBloc.add(PortfolioFetchEvent());
+    walletBloc.add(BalanceFetchEvent());
+    ScaffoldMessenger.of(context).clearSnackBars();
+    ScaffoldMessenger.of(context).showSnackBar(
+      const SnackBar(
+        backgroundColor: Colors.green,
+        content: Text('Sold Successfully'),
+      ),
+    );
+  }
 
   void watchlistButton() {}
 
@@ -165,7 +260,6 @@ class _TryBuySellState extends State<TryBuySell> {
                 buildWhen: (previous, current) => current is! WalletActionState,
                 listener: (context, state) {},
                 builder: (context, state) {
-                  double availableBalance = 0;
                   switch (state.runtimeType) {
                     case BalanceFetchingLoadingState:
                       return SplashScreen();
@@ -199,6 +293,7 @@ class _TryBuySellState extends State<TryBuySell> {
               ),
               const SizedBox(height: 10),
               BlocConsumer<PortfolioBloc, PortfolioState>(
+                bloc: portfolioBloc,
                 listenWhen: (previous, current) =>
                     current is PortfolioActionState,
                 buildWhen: (previous, current) =>
@@ -212,10 +307,11 @@ class _TryBuySellState extends State<TryBuySell> {
                     case PortfolioFetchingSuccessfulState:
                       final successsState =
                           state as PortfolioFetchingSuccessfulState;
-                      List<Portfolio> stocks = successsState.portfolio;
-                      for (int i = 0; i < stocks.length; i++) {
-                        if (widget.stock.shortName == stocks[i].stockName) {
-                          buyedQuantity = stocks[i].quantityBuyed;
+                      buyedStocks = successsState.portfolio;
+                      for (int i = 0; i < buyedStocks.length; i++) {
+                        if (widget.stock.shortName ==
+                            buyedStocks[i].stockName) {
+                          buyedQuantity = buyedStocks[i].quantityBuyed;
                         }
                       }
                       return Text(
@@ -245,7 +341,9 @@ class _TryBuySellState extends State<TryBuySell> {
               SizedBox(
                 width: double.infinity,
                 child: ElevatedButton(
-                  onPressed: _buyStock,
+                  onPressed: () {
+                    buyStock();
+                  },
                   style: const ButtonStyle(
                       backgroundColor: MaterialStatePropertyAll(Colors.green)),
                   child: const Text(
@@ -258,7 +356,7 @@ class _TryBuySellState extends State<TryBuySell> {
               SizedBox(
                 width: double.infinity,
                 child: ElevatedButton(
-                  onPressed: _sellStock,
+                  onPressed: sellStock,
                   style: const ButtonStyle(
                       backgroundColor: MaterialStatePropertyAll(Colors.red)),
                   child: const Text(

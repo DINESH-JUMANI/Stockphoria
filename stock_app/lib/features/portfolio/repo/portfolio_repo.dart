@@ -8,11 +8,13 @@ final db = FirebaseFirestore.instance;
 class PortfolioRepo {
   void update(Portfolio portfolioStock) async {
     bool isPresent = false;
+
     List<Portfolio> portfolio = await fetchPortfolio();
     for (int i = 0; i < portfolio.length; i++) {
       if (portfolio[i].stockName == portfolioStock.stockName) {
         isPresent = true;
-        db.collection('portfolio').doc(user.uid).update({
+
+        db.collection('portfolio').doc(user.uid + i.toString()).update({
           'user-id': user.uid,
           'stock-name': portfolioStock.stockName,
           'buying-price': portfolioStock.buyingPrice,
@@ -23,14 +25,18 @@ class PortfolioRepo {
       }
     }
     if (!isPresent) {
-      db.collection('portfolio').doc(user.uid).set({
-        'user-id': user.uid,
-        'stock-name': portfolioStock.stockName,
-        'buying-price': portfolioStock.buyingPrice,
-        'quantity': portfolioStock.quantityBuyed,
-        'amount': portfolioStock.totalAmount,
-      });
+      add(portfolioStock, portfolio.length.toString());
     }
+  }
+
+  void add(Portfolio portfolioStock, String length) {
+    db.collection('portfolio').doc(user.uid + length).set({
+      'user-id': user.uid,
+      'stock-name': portfolioStock.stockName,
+      'buying-price': portfolioStock.buyingPrice,
+      'quantity': portfolioStock.quantityBuyed,
+      'amount': portfolioStock.totalAmount,
+    });
   }
 
   Future<List<Portfolio>> fetchPortfolio() async {
@@ -38,8 +44,10 @@ class PortfolioRepo {
     int length = db.collection('portfolio').toString().length;
     for (int i = 0; i < length; i++) {
       final portfolioData =
-          await db.collection('portfolio').doc(user.uid).get();
-      if (portfolioData.data() == null) return [];
+          await db.collection('portfolio').doc(user.uid + i.toString()).get();
+      if (portfolioData.data() == null) {
+        return portfolio;
+      }
 
       Portfolio data = Portfolio(
           userId: portfolioData.data()!['user-id'].toString(),
