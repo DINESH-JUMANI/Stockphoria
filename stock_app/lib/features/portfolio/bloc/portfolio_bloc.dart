@@ -76,7 +76,10 @@ class PortfolioBloc extends Bloc<PortfolioEvent, PortfolioState> {
             totalAmount: buyingPrice * quantityBuyed);
       }
     }
-    PortfolioRepo().update(portfolioUpdated);
+    if (portfolioUpdated.quantityBuyed == 0)
+      PortfolioRepo().remove(portfolioUpdated);
+    else
+      PortfolioRepo().update(portfolioUpdated);
     emit(PortfolioSellState());
   }
 }

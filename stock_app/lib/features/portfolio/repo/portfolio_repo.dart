@@ -46,6 +46,13 @@ class PortfolioRepo {
     });
   }
 
+  void remove(Portfolio portfolioStock) {
+    db
+        .collection(COLLECTION_REF)
+        .doc(user.uid + "-" + portfolioStock.stockName)
+        .delete();
+  }
+
   Future<List<Portfolio>> fetchPortfolio() async {
     List<Portfolio> portfolio = [];
     final snapshots = await db.collection(COLLECTION_REF).get();

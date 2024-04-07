@@ -1,3 +1,5 @@
+import 'dart:developer';
+
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:stock_app/features/chart/ui/screens/chart_screen.dart';
@@ -25,6 +27,7 @@ class _BuySellScreenState extends State<BuySellScreen> {
   String interval = "1d";
   double availableBalance = 0;
   List<Portfolio> buyedStocks = [];
+  List<StockModel> watchlistedStocks = [];
   bool isWatchlisted = false;
   final WalletBloc walletBloc = WalletBloc();
   final PortfolioBloc portfolioBloc = PortfolioBloc();
@@ -93,9 +96,17 @@ class _BuySellScreenState extends State<BuySellScreen> {
   }
 
   void watchlistButton() {
-    watchlistBloc.add(WatchlistAddEvent(widget.stock));
-    GlobalWidgets().showSnackBar(context, Colors.green, "Added to watchlist");
-    isWatchlisted = !isWatchlisted;
+    if (!isWatchlisted) {
+      watchlistBloc.add(WatchlistAddEvent(widget.stock));
+
+      GlobalWidgets().showSnackBar(context, Colors.green, "Added to watchlist");
+      watchlistBloc.add(WatchlistFetchEvent());
+    } else {
+      watchlistBloc.add(WatchlistRemoveEvent(widget.stock));
+      GlobalWidgets()
+          .showSnackBar(context, Colors.green, "Removed from watchlist");
+      watchlistBloc.add(WatchlistFetchEvent());
+    }
     setState(() {});
   }
 
@@ -109,6 +120,7 @@ class _BuySellScreenState extends State<BuySellScreen> {
   void initState() {
     walletBloc.add(BalanceFetchEvent());
     portfolioBloc.add(PortfolioFetchEvent());
+    watchlistBloc.add(WatchlistFetchEvent());
     super.initState();
   }
 
@@ -119,11 +131,36 @@ class _BuySellScreenState extends State<BuySellScreen> {
         foregroundColor: Colors.white,
         centerTitle: true,
         actions: [
-          InkWell(
-            onTap: watchlistButton,
-            child: isWatchlisted
-                ? const Icon(Icons.bookmark)
-                : const Icon(Icons.bookmark_border),
+          BlocConsumer<WatchlistBloc, WatchlistState>(
+            bloc: watchlistBloc,
+            listenWhen: (previous, current) => current is WatchlistActionState,
+            buildWhen: (previous, current) => current is! WatchlistActionState,
+            listener: (context, state) {},
+            builder: (context, state) {
+              switch (state.runtimeType) {
+                case WatchlistFetchingLoadingState:
+                  return const Icon(Icons.bookmark_border);
+                case WatchlistFetchingSuccessfulState:
+                  final successState =
+                      state as WatchlistFetchingSuccessfulState;
+                  watchlistedStocks = successState.watchlistedStocks;
+                  for (var stock in watchlistedStocks) {
+                    if (stock.symbol == widget.stock.symbol) {
+                      isWatchlisted = true;
+                      break;
+                    }
+                  }
+                  return InkWell(
+                    onTap: watchlistButton,
+                    child: isWatchlisted
+                        ? const Icon(Icons.bookmark)
+                        : const Icon(Icons.bookmark_border),
+                  );
+                default:
+                  log("default");
+                  return const Icon(Icons.bookmark_border);
+              }
+            },
           ),
         ],
         title: Text(

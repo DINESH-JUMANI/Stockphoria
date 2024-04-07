@@ -25,7 +25,7 @@ class WatchlistRepo {
   }
 
   void addWatchlist(StockModel stock) {
-    db.collection(COLLECTION_REF).add({
+    db.collection(COLLECTION_REF).doc(user.uid + "-" + stock.shortName).set({
       'shortName': stock.shortName,
       'longName': stock.longName,
       'price': stock.price.toString(),
@@ -35,6 +35,9 @@ class WatchlistRepo {
   }
 
   void removeWatchlist(StockModel stock) {
-    db.collection(COLLECTION_REF).doc().delete();
+    db
+        .collection(COLLECTION_REF)
+        .doc(user.uid + "-" + stock.shortName)
+        .delete();
   }
 }

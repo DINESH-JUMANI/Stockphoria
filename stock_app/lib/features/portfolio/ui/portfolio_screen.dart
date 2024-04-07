@@ -41,12 +41,7 @@ class _PortfolioScreenState extends State<PortfolioScreen> {
               return GlobalWidgets().splashScreen();
             case PortfolioFetchingSuccessfulState:
               final successState = state as PortfolioFetchingSuccessfulState;
-              final portfolioStocks = successState.portfolio;
-              List<Portfolio> listOfBuyedStocks = [];
-              for (int i = 0; i < portfolioStocks.length; i++) {
-                if (portfolioStocks[i].quantityBuyed != 0)
-                  listOfBuyedStocks.add(portfolioStocks[i]);
-              }
+              List<Portfolio> listOfBuyedStocks = successState.portfolio;
               if (listOfBuyedStocks.isEmpty) {
                 return Center(
                   child: Column(
