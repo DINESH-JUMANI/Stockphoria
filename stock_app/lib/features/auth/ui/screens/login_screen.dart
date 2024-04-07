@@ -5,7 +5,7 @@ import 'package:flutter/material.dart';
 import 'package:stock_app/features/auth/ui/screens/forgot_password.dart';
 import 'package:stock_app/features/auth/ui/screens/registartion_screen.dart';
 import 'package:firebase_auth/firebase_auth.dart';
-import 'package:stock_app/tabs.dart';
+import 'package:stock_app/common/screens/tabs.dart';
 
 class LoginScreen extends StatefulWidget {
   const LoginScreen({Key? key}) : super(key: key);

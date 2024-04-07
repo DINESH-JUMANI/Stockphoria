@@ -6,8 +6,8 @@ import 'package:firebase_core/firebase_core.dart';
 import 'package:stock_app/features/portfolio/bloc/portfolio_bloc.dart';
 import 'package:stock_app/features/wallet/bloc/wallet_bloc.dart';
 import 'package:stock_app/features/watchlist/bloc/watchlist_bloc.dart';
-import 'package:stock_app/tabs.dart';
-import 'firebase_options.dart';
+import 'package:stock_app/common/screens/tabs.dart';
+import 'common/widgets/firebase_options.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();

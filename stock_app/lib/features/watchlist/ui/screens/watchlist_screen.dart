@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:stock_app/common/global_widgets.dart';
+import 'package:stock_app/common/widgets/global_widgets.dart';
 import 'package:stock_app/features/stock/model/stock_model.dart';
 import 'package:stock_app/features/stock/ui/widgets/list_stocks.dart';
 import 'package:stock_app/features/watchlist/bloc/watchlist_bloc.dart';

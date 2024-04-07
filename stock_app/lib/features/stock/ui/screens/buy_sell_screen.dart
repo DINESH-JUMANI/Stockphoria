@@ -4,7 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:stock_app/features/chart/ui/screens/chart_screen.dart';
 import 'package:stock_app/features/chart/ui/widgets/show_chart.dart';
-import 'package:stock_app/common/global_widgets.dart';
+import 'package:stock_app/common/widgets/global_widgets.dart';
 import 'package:stock_app/features/portfolio/bloc/portfolio_bloc.dart';
 import 'package:stock_app/features/portfolio/model/portfolio.dart';
 

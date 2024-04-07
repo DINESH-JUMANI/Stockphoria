@@ -2,7 +2,7 @@
 
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:stock_app/common/global_widgets.dart';
+import 'package:stock_app/common/widgets/global_widgets.dart';
 import 'package:stock_app/features/wallet/bloc/wallet_bloc.dart';
 
 class WalletScreen extends StatefulWidget {
