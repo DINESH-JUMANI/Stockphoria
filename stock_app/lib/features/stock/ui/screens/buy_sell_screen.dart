@@ -8,6 +8,7 @@ import 'package:stock_app/features/portfolio/model/portfolio.dart';
 
 import 'package:stock_app/features/wallet/bloc/wallet_bloc.dart';
 import 'package:stock_app/features/stock/model/stock_model.dart';
+import 'package:stock_app/features/watchlist/bloc/watchlist_bloc.dart';
 
 class BuySellScreen extends StatefulWidget {
   final StockModel stock;
@@ -19,12 +20,16 @@ class BuySellScreen extends StatefulWidget {
 }
 
 class _BuySellScreenState extends State<BuySellScreen> {
-  bool wishlist = false;
   final quantityController = TextEditingController();
   String range = "1y";
   String interval = "1d";
   double availableBalance = 0;
   List<Portfolio> buyedStocks = [];
+  bool isWatchlisted = false;
+  final WalletBloc walletBloc = WalletBloc();
+  final PortfolioBloc portfolioBloc = PortfolioBloc();
+  final WatchlistBloc watchlistBloc = WatchlistBloc();
+
   void buyStock() {
     if (quantityController.text.isEmpty) {
       GlobalWidgets().showSnackBar(context, Colors.red, "Enter quantity");
@@ -87,10 +92,12 @@ class _BuySellScreenState extends State<BuySellScreen> {
     GlobalWidgets().showSnackBar(context, Colors.green, 'Sold Successfully');
   }
 
-  void watchlistButton() {}
-
-  final WalletBloc walletBloc = WalletBloc();
-  final PortfolioBloc portfolioBloc = PortfolioBloc();
+  void watchlistButton() {
+    watchlistBloc.add(WatchlistAddEvent(widget.stock));
+    GlobalWidgets().showSnackBar(context, Colors.green, "Added to watchlist");
+    isWatchlisted = !isWatchlisted;
+    setState(() {});
+  }
 
   @override
   void dispose() {
@@ -114,7 +121,7 @@ class _BuySellScreenState extends State<BuySellScreen> {
         actions: [
           InkWell(
             onTap: watchlistButton,
-            child: wishlist
+            child: isWatchlisted
                 ? const Icon(Icons.bookmark)
                 : const Icon(Icons.bookmark_border),
           ),

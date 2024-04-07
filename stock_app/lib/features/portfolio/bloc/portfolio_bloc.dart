@@ -54,7 +54,7 @@ class PortfolioBloc extends Bloc<PortfolioEvent, PortfolioState> {
       PortfolioRepo().update(portfolioUpdated);
     }
     if (!isPresent) {
-      PortfolioRepo().add(portfolioUpdated, portfolio.length.toString());
+      PortfolioRepo().add(portfolioUpdated);
     }
     emit(PortfolioBuyState());
   }

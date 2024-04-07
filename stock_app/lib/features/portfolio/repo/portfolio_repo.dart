@@ -4,6 +4,7 @@ import 'package:stock_app/features/portfolio/model/portfolio.dart';
 
 final user = FirebaseAuth.instance.currentUser!;
 final db = FirebaseFirestore.instance;
+final COLLECTION_REF = "portfolio";
 
 class PortfolioRepo {
   void update(Portfolio portfolioStock) async {
@@ -14,50 +15,47 @@ class PortfolioRepo {
       if (portfolio[i].stockName == portfolioStock.stockName) {
         isPresent = true;
 
-        db.collection('portfolio').doc(user.uid + i.toString()).update({
+        db
+            .collection(COLLECTION_REF)
+            .doc(user.uid + "-" + portfolioStock.stockName)
+            .update({
           'user-id': user.uid,
           'stock-name': portfolioStock.stockName,
-          'buying-price': portfolioStock.buyingPrice,
-          'quantity': portfolioStock.quantityBuyed,
-          'amount': portfolioStock.totalAmount,
+          'buying-price': portfolioStock.buyingPrice.toString(),
+          'quantity': portfolioStock.quantityBuyed.toString(),
+          'amount': portfolioStock.totalAmount.toString(),
         });
         break;
       }
     }
     if (!isPresent) {
-      add(portfolioStock, portfolio.length.toString());
+      add(portfolioStock);
     }
   }
 
-  void add(Portfolio portfolioStock, String length) {
-    db.collection('portfolio').doc(user.uid + length).set({
+  void add(Portfolio portfolioStock) {
+    db
+        .collection(COLLECTION_REF)
+        .doc(user.uid + "-" + portfolioStock.stockName)
+        .set({
       'user-id': user.uid,
       'stock-name': portfolioStock.stockName,
-      'buying-price': portfolioStock.buyingPrice,
-      'quantity': portfolioStock.quantityBuyed,
-      'amount': portfolioStock.totalAmount,
+      'buying-price': portfolioStock.buyingPrice.toString(),
+      'quantity': portfolioStock.quantityBuyed.toString(),
+      'amount': portfolioStock.totalAmount.toString(),
     });
   }
 
   Future<List<Portfolio>> fetchPortfolio() async {
     List<Portfolio> portfolio = [];
-    int length = db.collection('portfolio').toString().length;
-    for (int i = 0; i < length; i++) {
-      final portfolioData =
-          await db.collection('portfolio').doc(user.uid + i.toString()).get();
-      if (portfolioData.data() == null) {
-        return portfolio;
-      }
-
+    final snapshots = await db.collection(COLLECTION_REF).get();
+    for (var snapshot in snapshots.docs) {
       Portfolio data = Portfolio(
-          userId: portfolioData.data()!['user-id'].toString(),
-          stockName: portfolioData.data()!['stock-name'].toString(),
-          buyingPrice:
-              double.parse(portfolioData.data()!['buying-price'].toString()),
-          quantityBuyed:
-              int.parse(portfolioData.data()!['quantity'].toString()),
-          totalAmount:
-              double.parse(portfolioData.data()!['amount'].toString()));
+          userId: snapshot.data()['user-id'],
+          stockName: snapshot.data()['stock-name'],
+          buyingPrice: double.parse(snapshot.data()['buying-price']),
+          quantityBuyed: int.parse(snapshot.data()['quantity']),
+          totalAmount: double.parse(snapshot.data()['amount']));
       portfolio.add(data);
     }
     return portfolio;

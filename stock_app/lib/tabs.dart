@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:stock_app/features/news/ui/screens/news_screen.dart';
 import 'package:stock_app/features/profile/ui/screens/profile.dart';
 import 'package:stock_app/features/stock/ui/screens/stock_screen.dart';
-import 'package:stock_app/features/watchlist/ui/screens/watchlist.dart';
+import 'package:stock_app/features/watchlist/ui/screens/watchlist_screen.dart';
 
 class Tabs extends StatefulWidget {
   const Tabs({super.key});

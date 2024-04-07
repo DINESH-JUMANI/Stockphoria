@@ -2,7 +2,7 @@ import 'dart:async';
 import 'dart:developer';
 import 'package:bloc/bloc.dart';
 import 'package:meta/meta.dart';
-import 'package:stock_app/features/wallet/repo/try_balance_repo.dart';
+import 'package:stock_app/features/wallet/repo/balance_repo.dart';
 part 'wallet_event.dart';
 part 'wallet_state.dart';
 
