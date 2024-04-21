@@ -8,15 +8,36 @@ final db = FirebaseFirestore.instance;
 
 class BalanceRepo {
   void update(double balance) async {
+    try {
+      await db
+          .collection('user')
+          .doc(user.uid)
+          .collection('balance')
+          .doc(user.uid)
+          .update({'amount': balance});
+    } catch (e) {
+      log(e.toString());
+      add(balance);
+    }
+  }
+
+  void add(double balance) async {
     await db
+        .collection('user')
+        .doc(user.uid)
         .collection('balance')
         .doc(user.uid)
-        .update({'amount': balance});
+        .set({'amount': balance});
   }
 
   Future<double> fetchBalance() async {
     try {
-      final balanceData = await db.collection('balance').doc(user.uid).get();
+      final balanceData = await db
+          .collection('user')
+          .doc(user.uid)
+          .collection('balance')
+          .doc(user.uid)
+          .get();
       String balance = balanceData.data()!['amount'].toString();
       return double.parse(balance);
     } catch (e) {

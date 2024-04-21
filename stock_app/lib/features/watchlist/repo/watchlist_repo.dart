@@ -10,7 +10,11 @@ class WatchlistRepo {
   Future<List<StockModel>> fetchWatchlist() async {
     List<StockModel> watchlistedStocks = [];
     StockModel stock;
-    final snapshots = await db.collection(COLLECTION_REF).get();
+    final snapshots = await db
+        .collection('user')
+        .doc(user.uid)
+        .collection(COLLECTION_REF)
+        .get();
     for (var snapshot in snapshots.docs) {
       stock = StockModel(
         shortName: snapshot.data()['shortName'],
@@ -25,7 +29,12 @@ class WatchlistRepo {
   }
 
   void addWatchlist(StockModel stock) {
-    db.collection(COLLECTION_REF).doc(user.uid + "-" + stock.shortName).set({
+    db
+        .collection('user')
+        .doc(user.uid)
+        .collection(COLLECTION_REF)
+        .doc(user.uid + "-" + stock.shortName)
+        .set({
       'shortName': stock.shortName,
       'longName': stock.longName,
       'price': stock.price.toString(),
@@ -36,6 +45,8 @@ class WatchlistRepo {
 
   void removeWatchlist(StockModel stock) {
     db
+        .collection('user')
+        .doc(user.uid)
         .collection(COLLECTION_REF)
         .doc(user.uid + "-" + stock.shortName)
         .delete();

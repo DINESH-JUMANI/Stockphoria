@@ -6,6 +6,7 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:stock_app/features/auth/ui/screens/verify_email.dart';
 
 final _firebase = FirebaseAuth.instance;
+final _db = FirebaseFirestore.instance;
 
 class RegistrationScreen extends StatefulWidget {
   const RegistrationScreen({Key? key}) : super(key: key);
@@ -41,6 +42,13 @@ class _RegistrationScreenState extends State<RegistrationScreen> {
         'profile_pic':
             "https://static.vecteezy.com/system/resources/thumbnails/019/060/628/small_2x/albums-icon-free-vector.jpg"
       });
+
+      await _db
+          .collection('user')
+          .doc(userCredentials.user!.uid)
+          .collection('balance')
+          .doc(userCredentials.user!.uid)
+          .set({'amount': 0});
     } on FirebaseAuthException catch (error) {
       ScaffoldMessenger.of(context).clearSnackBars();
       ScaffoldMessenger.of(context).showSnackBar(

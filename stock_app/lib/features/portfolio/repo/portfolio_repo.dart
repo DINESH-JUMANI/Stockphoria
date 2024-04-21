@@ -1,3 +1,5 @@
+import 'dart:developer';
+
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:stock_app/features/portfolio/model/portfolio.dart';
@@ -16,6 +18,8 @@ class PortfolioRepo {
         isPresent = true;
 
         db
+            .collection('user')
+            .doc(user.uid)
             .collection(COLLECTION_REF)
             .doc(user.uid + "-" + portfolioStock.stockName)
             .update({
@@ -34,7 +38,10 @@ class PortfolioRepo {
   }
 
   void add(Portfolio portfolioStock) {
+    log(user.uid);
     db
+        .collection('user')
+        .doc(user.uid)
         .collection(COLLECTION_REF)
         .doc(user.uid + "-" + portfolioStock.stockName)
         .set({
@@ -48,6 +55,8 @@ class PortfolioRepo {
 
   void remove(Portfolio portfolioStock) {
     db
+        .collection('user')
+        .doc(user.uid)
         .collection(COLLECTION_REF)
         .doc(user.uid + "-" + portfolioStock.stockName)
         .delete();
@@ -55,7 +64,11 @@ class PortfolioRepo {
 
   Future<List<Portfolio>> fetchPortfolio() async {
     List<Portfolio> portfolio = [];
-    final snapshots = await db.collection(COLLECTION_REF).get();
+    final snapshots = await db
+        .collection('user')
+        .doc(user.uid)
+        .collection(COLLECTION_REF)
+        .get();
     for (var snapshot in snapshots.docs) {
       Portfolio data = Portfolio(
           userId: snapshot.data()['user-id'],
