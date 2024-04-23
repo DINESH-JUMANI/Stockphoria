@@ -14,7 +14,7 @@ class BalanceRepo {
           .doc(user.uid)
           .collection('balance')
           .doc(user.uid)
-          .update({'amount': balance});
+          .update({"user-id": user.uid, 'amount': balance});
     } catch (e) {
       log(e.toString());
       add(balance);
@@ -27,7 +27,7 @@ class BalanceRepo {
         .doc(user.uid)
         .collection('balance')
         .doc(user.uid)
-        .set({'amount': balance});
+        .set({"user-id": user.uid, 'amount': balance});
   }
 
   Future<double> fetchBalance() async {

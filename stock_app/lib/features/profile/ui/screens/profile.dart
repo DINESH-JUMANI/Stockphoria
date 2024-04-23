@@ -17,12 +17,14 @@ class ProfileScreen extends StatefulWidget {
 }
 
 class _ProfileScreenState extends State<ProfileScreen> {
-  void _logOut() {
-    FirebaseAuth.instance.signOut();
+  final _user = FirebaseAuth.instance;
+  void _logOut() async {
+    await _user.signOut();
+
     ScaffoldMessenger.of(context).clearSnackBars();
     ScaffoldMessenger.of(context).showSnackBar(
       const SnackBar(
-        content: Text('Logged Out'),
+        content: Text('Logged Out Successfully'),
       ),
     );
     Navigator.of(context).pushReplacement(
@@ -35,7 +37,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
   String username = "Profile";
   String imageUrl = "";
   Future _getUser() async {
-    final user = FirebaseAuth.instance.currentUser!;
+    final user = _user.currentUser!;
     await user.reload();
     final userData =
         await FirebaseFirestore.instance.collection('user').doc(user.uid).get();

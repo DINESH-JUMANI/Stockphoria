@@ -48,7 +48,7 @@ class _RegistrationScreenState extends State<RegistrationScreen> {
           .doc(userCredentials.user!.uid)
           .collection('balance')
           .doc(userCredentials.user!.uid)
-          .set({'amount': 0});
+          .set({"user-id": userCredentials.user!.uid, 'amount': 0});
     } on FirebaseAuthException catch (error) {
       ScaffoldMessenger.of(context).clearSnackBars();
       ScaffoldMessenger.of(context).showSnackBar(
