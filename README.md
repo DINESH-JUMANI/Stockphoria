@@ -1,4 +1,4 @@
-# Stock Market App
+# Stockphoria
 
 ## Introduction
 Welcome to our Stock Market Application, built using the Flutter framework and Firebase services. This application provides users with real-time stock market data, portfolio management tools, and insightful analysis news to make informed investment decisions.
