@@ -6,19 +6,19 @@ This application is designed for both casual investors and experienced traders. 
 
 ## Installation Guide
 
-## Prerequisites
+### Prerequisites
 - Flutter SDK (Ensure it's installed and set up correctly)
 - Firebase CLI
 - A Google/Firebase account with a Firebase project setup
 - A compatible IDE (e.g., Android Studio, Visual Studio Code)
-## Setting Up Flutter Environment
+### Setting Up Flutter Environment
 1. Install Flutter SDK
     - Follow the official [Flutter Installation Guide](https://docs.flutter.dev/get-started/install/windows/mobile) to install Flutter on your system.
     - Ensure flutter command is in your system's PATH.
 2. Check Flutter Setup
     - Open a terminal and run flutter doctor to check for any missing dependencies or setup issues.
     - Resolve any issues indicated by flutter doctor.
-## Setting Up Firebase
+### Setting Up Firebase
 1. Install Firebase CLI
     - Follow the Firebase CLI installation guide from [here](https://firebase.google.com/docs/cli#setup) to install and set up the Firebase CLI.
     - Run firebase login to log in to your Firebase account.
@@ -26,7 +26,7 @@ This application is designed for both casual investors and experienced traders. 
     - Ensure you have access to the Firebase project associated with this Flutter project.
     - Download the google-services.json file for Android (if applicable) from the Firebase Console (Project Settings > General > Your apps).
     - Download the GoogleService-Info.plist file for iOS (if applicable) from the same place.
-## Cloning and Setting Up the Flutter Project
+### Cloning and Setting Up the Flutter Project
 1. Clone the Repository
     - Clone the project's repository to your local system.
     ```base
@@ -40,7 +40,7 @@ This application is designed for both casual investors and experienced traders. 
     ```base
     flutter pub get
     ```
-## Running the Project
+### Running the Project
 1. Running on Android
     - Connect an Android device or start an Android emulator.
     - Run flutter run to launch the project on the connected Android device/emulator.
@@ -53,7 +53,7 @@ This application is designed for both casual investors and experienced traders. 
     flutter run
     ```
 
-## Troubleshooting
+### Troubleshooting
 - If you encounter issues, use flutter doctor and flutter run -v for verbose output.
 - Check the console for Firebase-related errors or warnings.
 - Refer to the Flutter Documentation and Firebase Documentation for additional guidance.
@@ -61,8 +61,8 @@ This application is designed for both casual investors and experienced traders. 
 flutter doctor
 flutter run -v
 ```
-## Documentation
+### Documentation
 - All the Screenshots [here](https://drive.google.com/drive/folders/1uY5rBO21E2Zg1ddJOZ5JWijEK5xinjLu?usp=drive_link)
 - Demo Video [here](https://drive.google.com/file/d/1-su9yaFUdFmhpjmPrDqoBub1ifLGS0cY/view?usp=drive_link)
-- SRS Document [here]()
+- SRS Document [here](https://drive.google.com/file/d/1lEFU9Owq6upBwy38B2QQIglUE67besOs/view?usp=drive_link)
 - Presentation [here](https://docs.google.com/presentation/d/1QvVZhqU2fujT4D0pQDXO9-JbWpWS8MJ2/edit?usp=drive_link&ouid=101255765293565024714&rtpof=true&sd=true)
