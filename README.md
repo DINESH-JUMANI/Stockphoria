@@ -29,18 +29,14 @@ This application is designed for both casual investors and experienced traders. 
 ## Cloning and Setting Up the Flutter Project
     1. Clone the Repository
         - Clone the project's repository to your local system.
-        ```base
         - git clone https://github.com/DINESH-JUMANI/Stockphoria.git
-        ```
     2. Move Firebase Config Files
         - Place google-services.json in the android/app/ directory.
         - Place GoogleService-Info.plist in the ios/Runner/ directory.
     3. Get Flutter Packages
         - Navigate to the root of the Flutter project.
         - Run flutter pub get to fetch all the required packages.
-        ```base
         flutter pub get
-        ```
 ## Running the Project
     1. Running on Android
         - Connect an Android device or start an Android emulator.
